@@ -4,14 +4,14 @@ import 'package:github_browser/features/repo_search/components/repo_result_view.
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/features/repo_search/repositories/github_repository.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SearchPageState extends State<SearchPage> {
   String _searchQuery = '';
   bool _isLoading = false;
   List<Repository> _searchResults = [];
