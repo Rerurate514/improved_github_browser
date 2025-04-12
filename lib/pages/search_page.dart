@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_browser/core/components/search_field.dart';
+import 'package:github_browser/core/routes/page_router.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/features/repo_search/repositories/github_repository.dart';
@@ -66,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              //TODO ページルート -> settings_page
+              PageRouter.navigateSettingsPage(context);
             },
           ),
         ],
