@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
+import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
 import 'package:github_browser/pages/search_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(languageProvider).locale;
 
     return MaterialApp(
@@ -40,8 +42,14 @@ class MyApp extends ConsumerWidget {
 
         return supportedLocales.first;
       },
+      themeMode: themeMode,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
       ),
       home: SearchPage()
     );
