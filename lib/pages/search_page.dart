@@ -3,6 +3,7 @@ import 'package:github_browser/core/components/search_field.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/features/repo_search/repositories/github_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -60,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("home_bar_title"),
+        title: Text(AppLocalizations.of(context)!.home_bar_title),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -77,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             SearchField(
               onSearch: _handleSearch,
-              hint: "home_search_hint",
+              hint: AppLocalizations.of(context)!.home_search_hint,
             ),
             const SizedBox(height: 20),
             

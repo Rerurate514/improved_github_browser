@@ -40,7 +40,7 @@ void main() {
     
     await tester.pumpAndSettle();
 
-    expect(find.text("settings_toggle_darkMode"), findsOneWidget);
+    expect(find.text("ダークモードを有効化"), findsOneWidget);
     
     expect(find.byType(ToggleButton), findsOneWidget);
   });
