@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# GithubのPersonalAccessTokenを格納する.envファイルを無視
+*env.g.dart
+*.env
