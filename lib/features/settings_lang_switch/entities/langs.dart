@@ -6,7 +6,7 @@ enum Langs {
 }
 
 extension LangsToString on Langs {
-  String displayString(){
+  String get name{
     switch(this){
       case Langs.ja: return "日本語";
       case Langs.en: return "English";
