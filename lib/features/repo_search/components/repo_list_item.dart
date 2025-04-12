@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_browser/core/components/info_chip.dart';
-import 'package:github_browser/core/routes/PageRouter.dart';
+import 'package:github_browser/core/routes/page_router.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 
 class RepositoryListItem extends StatelessWidget {
