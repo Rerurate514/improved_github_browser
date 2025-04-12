@@ -6,7 +6,7 @@ class LanguageRepository {
   
   Future<void> saveLang(Language language) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_key, Language.japanese.code);
+    await prefs.setString(_key, language.code);
   }
   
   Future<Language> loadLang() async {
