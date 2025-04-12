@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RepositoryInfoCard extends StatelessWidget {
   final Repository repository;
@@ -68,27 +69,27 @@ class RepositoryInfoCard extends StatelessWidget {
                     {
                       'icon': Icons.code, 
                       'value': repository.projectLanguage, 
-                      'label': "details_repository_language"
+                      'label': AppLocalizations.of(context)!.details_repository_language
                     },
                     {
                       'icon': Icons.star, 
                       'value': repository.starCount.toString(), 
-                      'label': "details_repository_stars"
+                      'label': AppLocalizations.of(context)!.details_repository_stars
                     },
                     {
                       'icon': Icons.remove_red_eye, 
                       'value': repository.watcherCount.toString(), 
-                      'label': "details_repository_watchers"
+                      'label': AppLocalizations.of(context)!.details_repository_watchers
                     },
                     {
                       'icon': Icons.call_split, 
                       'value': repository.forkCount.toString(), 
-                      'label': "details_repository_forks"
+                      'label': AppLocalizations.of(context)!.details_repository_forks
                     },
                     {
                       'icon': Icons.error_outline, 
                       'value': repository.issueCount.toString(), 
-                      'label': "details_repository_issues"
+                      'label': AppLocalizations.of(context)!.details_repository_issues
                     },
                   ];
                   

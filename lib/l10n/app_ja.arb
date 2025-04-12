@@ -1,0 +1,40 @@
+{
+  "@@locale": "ja",
+  "appTitle": "GitHub Browser",
+
+  "home_bar_title": "GitHub リポジトリ検索",
+  "home_search_hint": "リポジトリ名を入力してください",
+  "home_search_empty_navigate": "検索キーワードを入力してください",
+  "home_search_empty": "検索結果がありません",
+
+  "details_bar_title": "詳細",
+  
+  "details_repository_card_title": "リポジトリ情報",
+  "details_repository_owner": "所有者",
+  "details_repository_name": "リポジトリ名",
+  "details_repository_description": "説明",
+  "details_repository_language": "言語",
+  "details_repository_stars": "スター",
+  "details_repository_watchers": "ウォッチャー",
+  "details_repository_forks": "フォーク",
+  "details_repository_issues": "イシュー",
+  "details_repository_created_at": "作成日",
+  "details_repository_updated_at": "更新日",
+
+  "settings_bar_title": "設定",
+  "settings_toggle_darkMode": "ダークモードを有効化",
+  "settings_select_lang": "言語設定",
+
+  "error_repository_search_failed": "リポジトリ検索中にエラーが発生しました",
+  "error_details_fetch_failed": "リポジトリ詳細の取得中にエラーが発生しました",
+  "error_issue_fetch_failed": "Issue数の取得中にエラーが発生しました",
+  "error_apiRequest_failed": "GitHub API リクエストに失敗しました",
+
+  "error_network": "ネットワークエラーが発生しました",
+  "error_not_found": "リポジトリが見つかりませんでした",
+  "error_general": "エラーが発生しました。もう一度お試しください",
+  
+  "button_retry": "再試行",
+  "button_view_on_github": "GitHubで見る",
+  "button_share": "共有"
+}

@@ -7,6 +7,8 @@ import 'package:github_browser/features/settings_theme_switch/providers/theme_re
 import 'package:github_browser/features/settings_theme_switch/repositories/theme_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @GenerateMocks([ThemeRepository])
 import 'theme_setting_toggle_test.mocks.dart';
@@ -28,6 +30,17 @@ void main() {
         themeRepositoryProvider.overrideWithValue(mockRepository),
       ],
       child: const MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          AppLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('ja', ''),
+          Locale('en', ''),
+        ],
+        locale: Locale('ja', ''),
         home: Scaffold(
           body: ThemeSettingToggle(),
         ),
@@ -40,7 +53,7 @@ void main() {
     
     await tester.pumpAndSettle();
 
-    expect(find.text("settings_toggle_darkMode"), findsOneWidget);
+    expect(find.text("ダークモードを有効化"), findsOneWidget);
     
     expect(find.byType(ToggleButton), findsOneWidget);
   });
