@@ -15,6 +15,6 @@ class LanguageRepository {
     return 
       value != null 
       ? Language.fromCode(value)
-      : Language.english;
+      : Language.japanese;
   }
 }
