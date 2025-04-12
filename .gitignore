@@ -47,3 +47,14 @@ app.*.map.json
 # GithubのPersonalAccessTokenを格納する.envファイルを無視
 *env.g.dart
 *.env
+
+# generateファイルの除外
+# Freezed生成ファイル
+**/*.freezed.dart
+**/*.freezed.dart.g.dart
+
+# Mockitoモックファイル
+**/*.mocks.dart
+
+# g.dartファイル（一般）
+**/*.g.dart
