@@ -1,0 +1,40 @@
+{
+  "@@locale": "en",
+  "appTitle": "GitHub Browser",
+
+  "home_bar_title": "Search GitHub Repositories",
+  "home_search_hint": "Enter repository name",
+  "home_search_empty_navigate": "Please enter a search keyword",
+  "home_search_empty": "No search results found",
+
+  "details_bar_title": "Details",
+  
+  "details_repository_card_title": "Repository Information",
+  "details_repository_owner": "Owner",
+  "details_repository_name": "Repository Name",
+  "details_repository_description": "Description",
+  "details_repository_language": "Language",
+  "details_repository_stars": "Stars",
+  "details_repository_watchers": "Watchers",
+  "details_repository_forks": "Forks",
+  "details_repository_issues": "Issues",
+  "details_repository_created_at": "Created Date",
+  "details_repository_updated_at": "Updated Date",
+
+  "settings_bar_title": "Settings",
+  "settings_toggle_darkMode": "Enable Dark Mode",
+  "settings_select_lang": "Language Setting",
+
+  "error_repository_search_failed": "Error occurred while searching repository",
+  "error_details_fetch_failed": "Error occurred while fetching repository details",
+  "error_issue_fetch_failed": "Error occurred while getting issues count",
+  "error_apiRequest_failed": "GitHub API request failed",
+
+  "error_network": "Network error occurred",
+  "error_not_found": "Repository not found",
+  "error_general": "An error occurred. Please try again.",
+  
+  "button_retry": "Retry",
+  "button_view_on_github": "View on GitHub",
+  "button_share": "Share"
+}
