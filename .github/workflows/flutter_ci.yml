@@ -1,0 +1,61 @@
+name: Flutter CI
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: "Read flutter version from fvm config"
+      id: flutter_info
+      run: |
+        FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+        echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: "Setup Flutter"
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+
+    - name: Clean Flutter build
+      run: flutter clean
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    # リモートリポジトリでGitHub Secretsから.envファイルを動的に作成
+    - name: Create .env
+      run: echo "API_KEY=${{ secrets.API_KEY }}" >> .env
+
+    - name: Run linter
+      run: flutter analyze
+
+    - name: Run tests
+      run: flutter test
+
+    # Androidのkeystoreファイル（key.jks）をSecretsからデコードして配置
+    # - name: Decode keystore
+    #   run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > android/app/key.jks
+
+    # - name: Build APK (Android)
+    #   run: flutter build apk --release
+    #   env:
+    #     KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+    #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    #     ALIAS: ${{ secrets.ALIAS }}
+    #     KEY_PATH: key.jks
+
+    # - name: "Deploy apk 🚀"
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: release-apk
+    #     path: build/app/outputs/flutter-apk/app-release.apk
+    #     retention-days: 7
