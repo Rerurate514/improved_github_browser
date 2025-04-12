@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:github_browser/core/exceptions/domain_exception.dart';
+import 'package:github_browser/features/settings_lang_switch/entities/langs.dart';
 
 class Language {
   final String code;
@@ -12,16 +13,16 @@ class Language {
     required this.locale,
   });
   
-  static const japanese = Language._(
-    code: 'ja',
-    name: '日本語',
-    locale: Locale('ja', 'JP'),
+  static final japanese = Language._(
+    code: Langs.ja.code,
+    name: Langs.ja.name,
+    locale: Langs.ja.locale,
   );
   
-  static const english = Language._(
-    code: 'en',
-    name: 'English',
-    locale: Locale('en', 'US'),
+  static final english = Language._(
+    code: Langs.en.code,
+    name: Langs.en.name,
+    locale: Langs.en.locale,
   );
   
   static List<Language> get allLanguages => [japanese, english];
