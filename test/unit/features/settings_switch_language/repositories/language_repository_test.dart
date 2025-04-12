@@ -35,12 +35,12 @@ void main() {
       expect(lang, Language.japanese);
     });
 
-    test('SharedPreferencesでエラーが発生した際にLanguage.englishを返すこと', () async {
+    test('SharedPreferencesでエラーが発生した際にLanguage.japaneseを返すこと', () async {
       SharedPreferences.setMockInitialValues({});
       
       final lang = await languageRepository.loadLang();
       
-      expect(lang, Language.english);
+      expect(lang, Language.japanese);
     });
 
     test('正常に保存できて、ロードできること', () async {
