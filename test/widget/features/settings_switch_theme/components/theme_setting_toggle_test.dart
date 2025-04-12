@@ -7,11 +7,7 @@ import 'package:github_browser/features/settings_theme_switch/providers/theme_re
 import 'package:github_browser/features/settings_theme_switch/repositories/theme_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
-import 'package:github_browser/pages/search_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @GenerateMocks([ThemeRepository])
@@ -41,8 +37,8 @@ void main() {
           AppLocalizations.delegate,
         ],
         supportedLocales: [
-          const Locale('ja', ''),
-          const Locale('en', ''),
+          Locale('ja', ''),
+          Locale('en', ''),
         ],
         locale: Locale('ja', ''),
         home: Scaffold(
