@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:github_browser/core/exceptions/github_api_exception.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:github_browser/core/env/env.dart';
