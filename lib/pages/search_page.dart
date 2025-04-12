@@ -15,6 +15,7 @@ class _SearchPageState extends State<SearchPage> {
   String _searchQuery = '';
   bool _isLoading = false;
   List<Repository> _searchResults = [];
+  // ignore: unused_field
   String? _errorMessage;
   
   final GitHubRepository _repository = GitHubRepository();
