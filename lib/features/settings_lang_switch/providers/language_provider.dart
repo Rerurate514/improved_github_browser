@@ -24,4 +24,8 @@ class LangNotifier extends StateNotifier<Language> {
     await _repository.saveLang(lang);
     state = lang;
   }
+
+  Language get currentLanguage {
+    return state;
+  }
 }

@@ -24,6 +24,8 @@ class LanguageSettingsButtonsState extends ConsumerState<LanguageSettingsButtons
 
   @override
   Widget build(BuildContext context) {
+    _selectedLanguage = ref.read(languageProvider.notifier).currentLanguage;
+
     return Expanded(
       child: ListView.builder(
         itemCount: Langs.values.length,
