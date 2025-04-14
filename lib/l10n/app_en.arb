@@ -25,6 +25,8 @@
   "settings_toggle_darkMode": "Enable Dark Mode",
   "settings_select_lang": "Language Setting",
 
+    "auth_wrapper_app_use_explain": "To use the app, you must sign in with your GitHub account.",
+
   "error_repository_search_failed": "Error occurred while searching repository",
   "error_details_fetch_failed": "Error occurred while fetching repository details",
   "error_issue_fetch_failed": "Error occurred while getting issues count",
