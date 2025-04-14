@@ -7,20 +7,27 @@ import 'package:github_browser/features/repo_search/repositories/github_reposito
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final String token;
+  const SearchPage({super.key, required this.token});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  // ignore: no_logic_in_create_state
+  State<SearchPage> createState() => SearchPageState(token);
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
   String _searchQuery = '';
   bool _isLoading = false;
   List<Repository> _searchResults = [];
   // ignore: unused_field
   String? _errorMessage;
   
-  final GitHubRepository _repository = GitHubRepository();
+  late final GitHubRepository _repository;
+
+  //ここでtokenをwidget.token経由で渡そうとすると、
+  //late final フィールドの初期化タイミングの問題が発生するためコンストラクタで
+  //直接渡す方式を採用
+  SearchPageState(String token) : _repository = GitHubRepository(apiToken: token);
   
   @override
   void dispose() {
