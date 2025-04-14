@@ -12,6 +12,6 @@ class ThemeRepository {
   Future<ThemeMode> loadThemeMode() async {
     final prefs = await SharedPreferences.getInstance();
     final value = prefs.getInt(_key);
-    return value != null ? ThemeMode.values[value] : ThemeMode.system;
+    return value != null ? ThemeMode.values[value] : ThemeMode.light;
   }
 }
