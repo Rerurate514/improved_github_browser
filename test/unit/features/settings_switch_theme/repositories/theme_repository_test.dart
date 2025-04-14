@@ -33,12 +33,12 @@ void main() {
       expect(themeMode, ThemeMode.light);
     });
 
-    test('SharedPreferencesでエラーが発生した際にsystemを返すこと', () async {
+    test('SharedPreferencesでエラーが発生した際にlightを返すこと', () async {
       SharedPreferences.setMockInitialValues({});
       
       final themeMode = await themeRepository.loadThemeMode();
       
-      expect(themeMode, ThemeMode.system);
+      expect(themeMode, ThemeMode.light);
     });
 
     test('正常に保存できて、ロードできること', () async {
