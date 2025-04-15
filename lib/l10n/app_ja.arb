@@ -25,6 +25,8 @@
   "settings_toggle_darkMode": "ダークモードを有効化",
   "settings_select_lang": "言語設定",
 
+  "auth_wrapper_app_use_explain": "アプリをご利用いただくには、GitHubアカウントでのサインインが必要です。",
+
   "error_repository_search_failed": "リポジトリ検索中にエラーが発生しました",
   "error_details_fetch_failed": "リポジトリ詳細の取得中にエラーが発生しました",
   "error_issue_fetch_failed": "Issue数の取得中にエラーが発生しました",

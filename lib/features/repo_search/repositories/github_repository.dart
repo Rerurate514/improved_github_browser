@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:github_browser/core/env/env.dart';
 
 class GitHubRepository {
-  final String _apiToken = Env.apiKey;
+  final String _apiToken;
 
   final String _baseUrl;
   final http.Client _httpClient;
@@ -15,9 +15,11 @@ class GitHubRepository {
   GitHubRepository({
     http.Client? httpClient,
     String baseUrl = 'https://api.github.com',
+    String? apiToken
   })  : 
         _httpClient = httpClient ?? http.Client(),
-        _baseUrl = baseUrl;
+        _baseUrl = baseUrl,
+        _apiToken = apiToken ?? Env.apiKey;
 
   Future<List<Repository>> searchRepositories(
     String query, {
