@@ -8,10 +8,8 @@ import 'package:oauth2/oauth2.dart';
 import 'package:github_browser/core/env/env.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'dart:convert';
-
-import 'package:github_browser/core/env/env.dart';
 
 class GithubAuthRepository {
   final Uri authorizationEndpoint = Uri.parse('https://github.com/login/oauth/authorize');
@@ -70,7 +68,7 @@ class GithubAuthRepository {
 
       final code = responseUrl.queryParameters['code'];
       if (code != null) {
-        final response = await http.post(
+        final response = await post(
           tokenEndpoint,
           headers: {
             'Accept': 'application/json',
