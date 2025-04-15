@@ -7,16 +7,22 @@ import '../repositories/secure_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({super.key});
+  final GithubAuthRepository authRepository;
+  final GithubSecureRepository secureRepository;
+
+  AuthWrapper({
+    super.key,
+    GithubAuthRepository? authRepository,
+    GithubSecureRepository? secureRepository,
+  }) : 
+    authRepository = authRepository ?? GithubAuthRepository(),
+    secureRepository = secureRepository ?? GithubSecureRepository();
 
   @override
   AuthWrapperState createState() => AuthWrapperState();
 }
 
 class AuthWrapperState extends State<AuthWrapper> {
-  final GithubAuthRepository _authRepository = GithubAuthRepository();
-  final GithubSecureRepository _secureRepository = GithubSecureRepository();
-
   bool _isLoading = true;
   String? _authToken;
   String? _errorMessage;
@@ -29,7 +35,7 @@ class AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _checkAuth() async {
     try {
-      final token = await _secureRepository.getToken();
+      final token = await widget.secureRepository.getToken();
       setState(() {
         _authToken = token;
         _isLoading = false;
@@ -49,7 +55,7 @@ class AuthWrapperState extends State<AuthWrapper> {
     });
 
     try {
-      final result = await _authRepository.signIn();
+      final result = await widget.authRepository.signIn();
       
       setState(() {
         _isLoading = false;
