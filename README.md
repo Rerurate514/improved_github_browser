@@ -123,11 +123,11 @@ Directory structure:
 
 
 ### 全体アーキテクチャ
-このGitHubブラウザアプリケーションは、**フィーチャーファースト**アーキテクチャを採用し、**リポジトリパターン**と**プロバイダーパターン**を状態管理に活用しています。コードベースは関心事の明確な分離を行っています。
+このGitHubブラウザアプリケーションは、**フィーチャーファースト**アーキテクチャを採用し、**リポジトリパターン**と**プロバイダーパターン**を状態管理に活用しています。
 
 ### コアコンポーネント
 #### アプリケーション構造
-- **フィーチャーベースの構成**: コードは技術的レイヤーではなく、主に機能（repo_search, repo_details, settings_lang_switch, settings_theme_switch）によって整理
+- **フィーチャーベースの構成**: コードは技術的レイヤーではなく、主に機能（repo_search, repo_details, settings_lang_switch, settings_theme_switch, github_auth）によって整理
 - **コア**: 共有コンポーネント、環境設定、例外処理、ルーティングはcoreディレクトリに分離
 - **ローカライゼーション**: ARBファイルと`flutter_localizations`を通じて英語と日本語のローカライゼーションをサポート
 - **CI/CD**: GitHub Actionsワークフローを通した、テスト、リントの自動化
@@ -161,12 +161,11 @@ Directory structure:
 ### 技術的特徴
 - **状態管理**: 状態管理にRiverpodを使用
 - **コード生成**: イミュータブルなデータクラスにFreezedを使用
-- **再利用可能なコンポーネント**: core/componentsに共有UI要素
 
 ## セットアップ
 ### 環境変数の設定
 最初にプロジェクトルートに`.env`ファイルを作成する。
-`.env.exmple`を参考にしてGithub personal access token keyを記入する。
+`.env.exmple`を参考にして`.env`ファイルにGithub personal access token key、またはGithubのOAuth AppsのClientIdとClientSecretを記入する。
 
 ### パッケージの取得と実行ファイルの生成
 次に、以下のコマンド群を実行する。
