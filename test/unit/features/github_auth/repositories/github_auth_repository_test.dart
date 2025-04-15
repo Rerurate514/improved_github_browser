@@ -27,7 +27,6 @@ void main() {
   const testClientSecret = 'test_client_secret';
   const testRedirectUrl = 'com.example://callback';
   final testScopes = ['repo', 'user'];
-  const testCredentialsPath = 'test_credentials.json';
   const testAccessToken = 'test_access_token';
   
   setUp(() {
