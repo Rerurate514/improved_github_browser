@@ -5,7 +5,8 @@ class GithubSecureRepository{
   final FlutterSecureStorage _secureStorage;
   static const String _tokenKey = 'github_auth_token';
 
-  GithubSecureRepository(): _secureStorage = const FlutterSecureStorage();
+  GithubSecureRepository({FlutterSecureStorage? storage})
+    : _secureStorage = storage ?? const FlutterSecureStorage();
 
 
   Future<void> saveToken(String token) async {
