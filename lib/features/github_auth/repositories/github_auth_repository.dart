@@ -7,7 +7,7 @@ import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:github_browser/core/env/env.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart';
 import 'dart:convert';
 
@@ -21,8 +21,10 @@ class GithubAuthRepository {
   
   final List<String> scopes;
   final File credentialsFile;
+
+  final AppLinks appLinks;
+  final UrlLauncher urlLauncher;
   
-  final AppLinks _appLinks = AppLinks();
   StreamSubscription? _linkSubscription;
   
   GithubAuthRepository({
@@ -31,12 +33,16 @@ class GithubAuthRepository {
     String? redirectUrl,
     List<String>? scopes,
     String? credentialsPath,
+    AppLinks? appLinks,
+    UrlLauncher? urlLauncher,
   }) : 
     clientId = clientId ?? Env.clientId,
     clientSecret = clientSecret ?? Env.clientSecret,
     redirectUrl = Uri.parse(redirectUrl ?? Env.redirectUrl),
     scopes = scopes ?? ['repo', 'user'],
-    credentialsFile = File(credentialsPath ?? 'credentials.json');
+    credentialsFile = File(credentialsPath ?? 'credentials.json'),
+    appLinks = appLinks ?? AppLinks(),
+    urlLauncher = urlLauncher ?? DefaultUrlLauncher();
   
   Future<AuthResult> signIn() async {
 
@@ -67,29 +73,29 @@ class GithubAuthRepository {
       debugPrint('レスポンスパラメータ: ${responseUrl.queryParameters}');
 
       final code = responseUrl.queryParameters['code'];
-      if (code != null) {
-        final response = await post(
-          tokenEndpoint,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: {
-            'client_id': clientId,
-            'client_secret': clientSecret,
-            'code': code,
-            'redirect_uri': redirectUrl.toString(),
-          },
-        );
+      if (code == null) return AuthResult.failure("responseUrl.queryParameters code is null");
+      
+      final response = await post(
+        tokenEndpoint,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'client_id': clientId,
+          'client_secret': clientSecret,
+          'code': code,
+          'redirect_uri': redirectUrl.toString(),
+        },
+      );
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final accessToken = data['access_token'];
         
-        if (response.statusCode == 200) {
-          final data = json.decode(response.body);
-          final accessToken = data['access_token'];
-          
-          return AuthResult.success(accessToken);
-        } else {
-          throw Exception('Failed to get access token: ${response.body}');
-        }
+        return AuthResult.success(accessToken);
+      } else {
+        throw Exception('Failed to get access token: ${response.body}');
       }
     } catch (e, stackTrace) {
       debugPrint('認証プロセス中にエラーが発生しました: $e');
@@ -106,7 +112,7 @@ class GithubAuthRepository {
     final completer = Completer<Uri>();
     
     try {
-      final initialLink = await _appLinks.getInitialLink();
+      final initialLink = await appLinks.getInitialLink();
       if (initialLink != null && initialLink.queryParameters.containsKey('code')) {
         debugPrint('初期App Linkからコードを検出: ${initialLink.queryParameters['code']}');
         completer.complete(initialLink);
@@ -116,7 +122,7 @@ class GithubAuthRepository {
       debugPrint('初期App Linkの取得エラー: $e');
     }
     
-    _linkSubscription = _appLinks.uriLinkStream.listen((Uri uri) {
+    _linkSubscription = appLinks.uriLinkStream.listen((Uri uri) {
       if (!completer.isCompleted && uri.queryParameters.containsKey('code')) {
         debugPrint('App Linkからコードを検出: ${uri.queryParameters['code']}');
         completer.complete(uri);
@@ -135,9 +141,20 @@ class GithubAuthRepository {
     debugPrint('以下のURLをブラウザで開いてGitHubにログインしてください:');
     debugPrint(url.toString());
 
-    await launchUrl(
+    urlLauncher.launch(
       url,
       mode: LaunchMode.externalApplication,
     );
+  }
+}
+
+abstract class UrlLauncher {
+  Future<bool> launch(Uri url, {LaunchMode mode});
+}
+
+class DefaultUrlLauncher implements UrlLauncher {
+  @override
+  Future<bool> launch(Uri url, {LaunchMode mode = LaunchMode.platformDefault}) {
+    return launchUrl(url, mode: mode);
   }
 }
