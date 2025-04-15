@@ -10,6 +10,7 @@ import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/repositories/github_auth_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -103,7 +104,7 @@ void main() {
       final streamController = StreamController<Uri>();
       when(mockAppLinks.uriLinkStream).thenAnswer((_) => streamController.stream);
       
-      final httpMock = (request) async {
+      httpMock(request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"access_token": "$testAccessToken", "token_type": "bearer", "scope": "repo,user"}',
@@ -112,7 +113,7 @@ void main() {
           );
         }
         return http.Response('Not found', 404);
-      };
+      }
       
       final testRepository = _TestGithubAuthRepositoryWithHttpMock(
         clientId: testClientId,
@@ -148,7 +149,7 @@ void main() {
       final streamController = StreamController<Uri>();
       when(mockAppLinks.uriLinkStream).thenAnswer((_) => streamController.stream);
       
-      final httpMock = (request) async {
+      httpMock(request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"error": "bad_verification_code"}',
@@ -157,7 +158,7 @@ void main() {
           );
         }
         return http.Response('Not found', 404);
-      };
+      }
       
       final testRepository = _TestGithubAuthRepositoryWithHttpMock(
         clientId: testClientId,
@@ -187,7 +188,7 @@ void main() {
       final initialLink = Uri.parse('$testRedirectUrl?code=initial_code');
       when(mockAppLinks.getInitialLink()).thenAnswer((_) async => initialLink);
       
-      final httpMock = (request) async {
+      httpMock(request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"access_token": "$testAccessToken", "token_type": "bearer", "scope": "repo,user"}',
@@ -196,7 +197,7 @@ void main() {
           );
         }
         return http.Response('Not found', 404);
-      };
+      }
       
       final testRepository = _TestGithubAuthRepositoryWithHttpMock(
         clientId: testClientId,
