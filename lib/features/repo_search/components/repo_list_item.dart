@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_browser/core/components/info_chip.dart';
+import 'package:github_browser/core/routes/page_router.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 
 class RepositoryListItem extends StatelessWidget {
@@ -17,7 +18,7 @@ class RepositoryListItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: () {
-          //TODO ページルート -> detals_page
+          PageRouter.navigateDetailsPage(context, repository);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
