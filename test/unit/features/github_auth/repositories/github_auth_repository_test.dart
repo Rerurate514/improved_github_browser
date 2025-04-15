@@ -46,7 +46,6 @@ void main() {
       clientSecret: testClientSecret,
       redirectUrl: testRedirectUrl,
       scopes: testScopes,
-      credentialsPath: testCredentialsPath,
       appLinks: mockAppLinks,
       urlLauncher: mockUrlLauncher,
     );
@@ -58,7 +57,6 @@ void main() {
       expect(repository.clientSecret, testClientSecret);
       expect(repository.redirectUrl, Uri.parse(testRedirectUrl));
       expect(repository.scopes, testScopes);
-      expect(repository.credentialsFile, isA<File>());
       expect(repository.appLinks, mockAppLinks);
     });
     
@@ -69,7 +67,6 @@ void main() {
       expect(repository.clientSecret, Env.clientSecret);
       expect(repository.redirectUrl, Uri.parse(Env.redirectUrl));
       expect(repository.scopes, ['repo', 'user']);
-      expect(repository.credentialsFile, isA<File>());
       expect(repository.appLinks, isA<AppLinks>());
     });
     
@@ -81,7 +78,6 @@ void main() {
         clientSecret: testClientSecret,
         redirectUrl: testRedirectUrl,
         scopes: testScopes,
-        credentialsPath: testCredentialsPath,
         appLinks: mockAppLinks,
         urlLauncher: mockUrlLauncher,
         apiKey: testApiKey,
@@ -120,7 +116,6 @@ void main() {
         clientSecret: testClientSecret,
         redirectUrl: testRedirectUrl,
         scopes: testScopes,
-        credentialsPath: testCredentialsPath,
         appLinks: mockAppLinks,
         urlLauncher: mockUrlLauncher,
         httpMock: httpMock,
@@ -165,7 +160,6 @@ void main() {
         clientSecret: testClientSecret,
         redirectUrl: testRedirectUrl,
         scopes: testScopes,
-        credentialsPath: testCredentialsPath,
         appLinks: mockAppLinks,
         urlLauncher: mockUrlLauncher,
         httpMock: httpMock,
@@ -204,7 +198,6 @@ void main() {
         clientSecret: testClientSecret,
         redirectUrl: testRedirectUrl,
         scopes: testScopes,
-        credentialsPath: testCredentialsPath,
         appLinks: mockAppLinks,
         urlLauncher: mockUrlLauncher,
         httpMock: httpMock,
@@ -229,7 +222,6 @@ class _TestGithubAuthRepository extends GithubAuthRepository {
     required String clientSecret,
     required String redirectUrl,
     required List<String> scopes,
-    required String credentialsPath,
     required AppLinks appLinks,
     required UrlLauncher urlLauncher,
     required this.apiKey,
@@ -238,7 +230,6 @@ class _TestGithubAuthRepository extends GithubAuthRepository {
     clientSecret: clientSecret,
     redirectUrl: redirectUrl,
     scopes: scopes,
-    credentialsPath: credentialsPath,
     appLinks: appLinks,
     urlLauncher: urlLauncher,
   );
@@ -261,7 +252,6 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
     required String clientSecret,
     required String redirectUrl,
     required List<String> scopes,
-    required String credentialsPath,
     required AppLinks appLinks,
     required UrlLauncher urlLauncher,
     required this.httpMock,
@@ -270,7 +260,6 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
     clientSecret: clientSecret,
     redirectUrl: redirectUrl,
     scopes: scopes,
-    credentialsPath: credentialsPath,
     appLinks: appLinks,
     urlLauncher: urlLauncher,
   );

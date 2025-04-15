@@ -20,7 +20,6 @@ class GithubAuthRepository {
   final Uri redirectUrl;
   
   final List<String> scopes;
-  final File credentialsFile;
 
   final AppLinks appLinks;
   final UrlLauncher urlLauncher;
@@ -32,7 +31,6 @@ class GithubAuthRepository {
     String? clientSecret,
     String? redirectUrl,
     List<String>? scopes,
-    String? credentialsPath,
     AppLinks? appLinks,
     UrlLauncher? urlLauncher,
   }) : 
@@ -40,7 +38,6 @@ class GithubAuthRepository {
     clientSecret = clientSecret ?? Env.clientSecret,
     redirectUrl = Uri.parse(redirectUrl ?? Env.redirectUrl),
     scopes = scopes ?? ['repo', 'user'],
-    credentialsFile = File(credentialsPath ?? 'credentials.json'),
     appLinks = appLinks ?? AppLinks(),
     urlLauncher = urlLauncher ?? DefaultUrlLauncher();
   
