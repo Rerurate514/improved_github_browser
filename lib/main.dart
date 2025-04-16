@@ -19,7 +19,8 @@ class MyApp extends ConsumerWidget {
     final locale = ref.watch(languageProvider).locale;
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Github_browser',
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
