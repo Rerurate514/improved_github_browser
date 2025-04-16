@@ -169,6 +169,7 @@ Directory structure:
 最初にプロジェクトルートに`.env`ファイルを作成する。
 
 `.env.exmple`を参考にして`.env`ファイルにGithub personal access token key、またはGithubのOAuth AppsのClientIdとClientSecretを記入する。
+おそらく、メールにて`.env`の中身が送信されているかと思います。
 
 ### パッケージの取得と実行ファイルの生成
 次に、以下のコマンド群を実行する。
@@ -179,3 +180,7 @@ flutter gen-l10n
 flutter pub get
 ```
 
+### 資格情報の生成
+おそらく、メールにて`key.jks`と`key.properties`の中身が送信されているかと思います。
+- `key.jks`は`android/app/`内に格納
+- `key.properties`は`android/`直下に格納
