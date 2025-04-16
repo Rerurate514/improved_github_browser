@@ -172,6 +172,10 @@ Directory structure:
 
 ### パッケージの取得と実行ファイルの生成
 次に、以下のコマンド群を実行する。
-`flutter pub get` //パッケージの取得
-`flutter pub run build_runner build --delete-conflicting-outputs` //mockitoやfreezedによるファイル生成
-`flutter gen-l10n` //l10nの言語ファイルの生成
+```
+flutter pun get
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter gen-l10n
+flutter pub get
+```
+
