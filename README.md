@@ -7,9 +7,11 @@
 - スター数
 - ウォッチャー数
 - フォーク数
+
 情報の取得にはGithubAPIを使用しています。
 
 ## Architecture
+```
 Directory structure:
 └── rerurate514-github_browser/
     ├── README.md
@@ -120,7 +122,7 @@ Directory structure:
         │   └── feature_request.md
         └── workflows/
             └── flutter_ci.yml
-
+```
 
 ### 全体アーキテクチャ
 このGitHubブラウザアプリケーションは、**フィーチャーファースト**アーキテクチャを採用し、**リポジトリパターン**と**プロバイダーパターン**を状態管理に活用しています。
@@ -165,6 +167,7 @@ Directory structure:
 ## セットアップ
 ### 環境変数の設定
 最初にプロジェクトルートに`.env`ファイルを作成する。
+
 `.env.exmple`を参考にして`.env`ファイルにGithub personal access token key、またはGithubのOAuth AppsのClientIdとClientSecretを記入する。
 
 ### パッケージの取得と実行ファイルの生成
