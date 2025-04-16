@@ -173,7 +173,7 @@ Directory structure:
 ### パッケージの取得と実行ファイルの生成
 次に、以下のコマンド群を実行する。
 ```
-flutter pun get
+flutter pub get
 flutter pub run build_runner build --delete-conflicting-outputs
 flutter gen-l10n
 flutter pub get
