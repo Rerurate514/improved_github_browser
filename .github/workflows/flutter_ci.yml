@@ -58,22 +58,22 @@ jobs:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ~/coverage/lcov.info
 
-    # - name: Decode keystore
-    #   run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > android/app/key.jks
-    # 
-    # - name: Create key.properties
-    #   run: |
-    #     echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" > android/key.properties
-    #     echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-    #     echo "keyAlias=${{ secrets.ALIAS }}" >> android/key.properties
-    #     echo "storeFile=key.jks" >> android/key.properties
-    # 
-    # - name: Build APK (Android)
-    #   run: flutter build apk --release
-    # 
-    # - name: "Deploy apk 🚀"
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: release-apk
-    #     path: build/app/outputs/flutter-apk/app-release.apk
-    #     retention-days: 7
+    - name: Decode keystore
+      run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > android/app/key.jks
+    
+    - name: Create key.properties
+      run: |
+        echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" > android/key.properties
+        echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+        echo "keyAlias=${{ secrets.ALIAS }}" >> android/key.properties
+        echo "storeFile=key.jks" >> android/key.properties
+    
+    - name: Build APK (Android)
+      run: flutter build apk --release
+    
+    - name: "Deploy apk 🚀"
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 7
