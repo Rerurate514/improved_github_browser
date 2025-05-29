@@ -4,7 +4,7 @@ import 'package:github_browser/core/routes/page_router.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/features/repo_search/repositories/github_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 class SearchPage extends StatefulWidget {
   final String token;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
 
 import '../repositories/github_auth_repository.dart';
 import '../repositories/secure_repository.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthWrapper extends StatefulWidget {
   final GithubAuthRepository authRepository;

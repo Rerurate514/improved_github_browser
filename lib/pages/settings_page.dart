@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:github_browser/features/settings_lang_switch/components/language_setting_buttons.dart';
 import 'package:github_browser/features/settings_theme_switch/components/theme_settings_toggle.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/features/github_auth/components/auth_wrapper.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
