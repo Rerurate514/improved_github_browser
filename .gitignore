@@ -59,5 +59,11 @@ app.*.map.json
 # g.dartファイル（一般）
 **/*.g.dart
 
+# fvm関連ファイル
+.fvm/flutter_sdk
+.fvm/versions/
+.fvm/release
+.fvm/version
+
 # intlファイル
 **/app_localizations*.dart
