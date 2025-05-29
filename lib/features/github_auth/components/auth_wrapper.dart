@@ -128,7 +128,7 @@ class SignInPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                AppLocalizations.of(context)!.auth_wrapper_app_use_explain,
+                AppLocalizations.of(context).auth_wrapper_app_use_explain,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -138,7 +138,7 @@ class SignInPage extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onSignIn,
                 icon: const Icon(Icons.login),
-                label: Text(AppLocalizations.of(context)!.appTitle),
+                label: Text(AppLocalizations.of(context).appTitle),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   minimumSize: const Size(200, 0),

@@ -19,7 +19,7 @@ class _ThemeSettingToggleState extends ConsumerState<ThemeSettingToggle> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(AppLocalizations.of(context)!.settings_toggle_darkMode),
+        Text(AppLocalizations.of(context).settings_toggle_darkMode),
         ToggleButton(
           isActive: themeMode == ThemeMode.light ? false : true,
           isToggledCallback: (bool isToggled) {

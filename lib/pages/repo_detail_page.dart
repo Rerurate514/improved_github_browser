@@ -16,7 +16,7 @@ class _RepoDetailsPageState extends State<RepoDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.details_bar_title),
+        title: Text(AppLocalizations.of(context).details_bar_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

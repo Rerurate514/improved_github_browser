@@ -15,7 +15,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings_bar_title),
+        title: Text(AppLocalizations.of(context).settings_bar_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

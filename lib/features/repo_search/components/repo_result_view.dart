@@ -38,8 +38,8 @@ class RepositoryResultsView extends StatelessWidget {
       return Center(
         child: Text(
           searchQuery.isEmpty 
-          ? AppLocalizations.of(context)!.home_bar_title
-          : AppLocalizations.of(context)!.home_search_empty,
+          ? AppLocalizations.of(context).home_bar_title
+          : AppLocalizations.of(context).home_search_empty,
           style: const TextStyle(fontSize: 16),
         ),
       );
