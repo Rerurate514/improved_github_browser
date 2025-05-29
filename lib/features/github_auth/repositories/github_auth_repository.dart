@@ -23,7 +23,7 @@ class GithubAuthRepository {
   final AppLinks appLinks;
   final UrlLauncher urlLauncher;
   
-  StreamSubscription? _linkSubscription;
+  StreamSubscription<dynamic>? _linkSubscription;
   
   GithubAuthRepository({
     String? clientId,
@@ -123,7 +123,7 @@ class GithubAuthRepository {
         debugPrint('App Linkからコードを検出: ${uri.queryParameters['code']}');
         completer.complete(uri);
       }
-    }, onError: (error) {
+    }, onError: (dynamic error) {
       debugPrint('App Linkエラー: $error');
       if (!completer.isCompleted) {
         completer.completeError(error);
