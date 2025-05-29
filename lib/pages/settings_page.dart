@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:github_browser/features/settings_lang_switch/components/language_setting_buttons.dart';
 import 'package:github_browser/features/settings_theme_switch/components/theme_settings_toggle.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -15,7 +15,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings_bar_title),
+        title: Text(AppLocalizations.of(context).settings_bar_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

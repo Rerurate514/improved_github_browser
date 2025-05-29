@@ -6,10 +6,10 @@ import 'package:github_browser/features/github_auth/components/auth_wrapper.dart
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/repositories/github_auth_repository.dart';
 import 'package:github_browser/features/github_auth/repositories/secure_repository.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @GenerateMocks([GithubAuthRepository, GithubSecureRepository])
 import 'auth_wrapper_test.mocks.dart';
