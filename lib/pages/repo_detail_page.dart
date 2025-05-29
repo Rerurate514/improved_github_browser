@@ -25,4 +25,3 @@ class _RepoDetailsPageState extends State<RepoDetailsPage> {
     );
   }
 }
-

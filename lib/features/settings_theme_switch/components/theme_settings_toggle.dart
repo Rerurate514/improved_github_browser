@@ -21,7 +21,7 @@ class _ThemeSettingToggleState extends ConsumerState<ThemeSettingToggle> {
       children: [
         Text(AppLocalizations.of(context).settings_toggle_darkMode),
         ToggleButton(
-          isActive: themeMode == ThemeMode.light ? false : true,
+          isActive: themeMode != ThemeMode.light,
           isToggledCallback: (bool isToggled) {
             ref.read(themeModeProvider.notifier).setThemeMode(
               isToggled

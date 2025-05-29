@@ -35,7 +35,7 @@ void main() {
     
     expect(container.read(themeModeProvider), ThemeMode.system);
     
-    await Future.delayed(Duration.zero);
+    await Future<dynamic>.delayed(Duration.zero);
     
     verify(mockRepository.loadThemeMode()).called(1);
   });
