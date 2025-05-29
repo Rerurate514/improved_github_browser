@@ -58,3 +58,5 @@ app.*.map.json
 
 # g.dartファイル（一般）
 **/*.g.dart
+
+/.fvm
