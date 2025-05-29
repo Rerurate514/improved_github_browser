@@ -27,10 +27,7 @@ class MyApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
         AppLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ja', ''),
-        const Locale('en', ''),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
       localeResolutionCallback: (locale, supportedLocales) {
         if (locale == null) return supportedLocales.first;
