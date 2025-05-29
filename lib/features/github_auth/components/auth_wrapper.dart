@@ -129,7 +129,7 @@ class SignInPage extends StatelessWidget {
               Text(
                 AppLocalizations.of(context).auth_wrapper_app_use_explain,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
