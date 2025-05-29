@@ -12,19 +12,13 @@ class LanguageSettingsButtons extends ConsumerStatefulWidget {
 }
 
 class LanguageSettingsButtonsState extends ConsumerState<LanguageSettingsButtons> {
-  Language _selectedLanguage = Language.japanese;
-
   void _changeLanguage(Language language) {
-    setState(() {
-      _selectedLanguage = language;
-    });
-
     ref.read(languageProvider.notifier).setLanguage(language);
   }
 
   @override
   Widget build(BuildContext context) {
-    _selectedLanguage = ref.read(languageProvider.notifier).currentLanguage;
+    Language selectedLanguage = ref.watch(languageProvider.notifier).currentLanguage;
 
     return Expanded(
       child: ListView.builder(
@@ -35,7 +29,7 @@ class LanguageSettingsButtonsState extends ConsumerState<LanguageSettingsButtons
             title: Text(language.name),
             trailing: Radio<Language>(
               value: language,
-              groupValue: _selectedLanguage,
+              groupValue: selectedLanguage,
               onChanged: (value) => _changeLanguage(value!),
             ),
           );
