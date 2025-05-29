@@ -60,3 +60,6 @@ app.*.map.json
 **/*.g.dart
 
 /.fvm
+
+# intlファイル
+**/app_localizations*.dart
