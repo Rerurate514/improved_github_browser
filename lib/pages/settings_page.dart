@@ -17,10 +17,9 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).settings_bar_title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ThemeSettingToggle(),
             LanguageSettingsButtons()
@@ -30,4 +29,3 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
-

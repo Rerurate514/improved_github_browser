@@ -19,7 +19,6 @@ void main() {
     mockClient = MockClient();
     repository = GitHubRepository(
       httpClient: mockClient,
-      baseUrl: 'https://api.github.com',
     );
   });
 
