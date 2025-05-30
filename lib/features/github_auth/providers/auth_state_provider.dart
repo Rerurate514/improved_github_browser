@@ -17,23 +17,13 @@ class AuthNotifier extends AsyncNotifier<AuthResult> {
   Future<AuthResult> _checkExistingAuth() async {
     try {
       final token = await ref.read(githubSecureRepositoryProvider).getToken();
-      if (token != null && token.isNotEmpty && token != "") {
-
+      if (token != null && token.isNotEmpty) {
         return AuthResult(isSuccess: true, token: token);
       } else {
-          state = AsyncValue.error(
-            'Failed to get token', 
-            StackTrace.current
-          );
-        return AuthResult(isSuccess: false);
+        return AuthResult(isSuccess: false, errorMessage: "Failed to get token from secureStorage");
       }
     } catch (e) {
-      state = AsyncValue.error(
-        'Failed to get token', 
-        StackTrace.current
-      );
-
-      return AuthResult(isSuccess: false);
+      return AuthResult(isSuccess: false, errorMessage: e.toString());
     }
   }
 
