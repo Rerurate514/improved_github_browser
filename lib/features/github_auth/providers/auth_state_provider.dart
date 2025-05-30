@@ -20,7 +20,7 @@ class AuthNotifier extends AsyncNotifier<AuthResult> {
       if (token != null && token.isNotEmpty) {
         return AuthResult(isSuccess: true, token: token);
       } else {
-        return AuthResult(isSuccess: false, errorMessage: "Failed to get token from secureStorage");
+        return AuthResult(isSuccess: false);
       }
     } catch (e) {
       return AuthResult(isSuccess: false, errorMessage: e.toString());
