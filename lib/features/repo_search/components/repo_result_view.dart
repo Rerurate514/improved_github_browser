@@ -1,56 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/features/repo_search/components/repo_list_item.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
+import 'package:github_browser/features/repo_search/providers/search_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 
-class RepositoryResultsView extends StatelessWidget {
-  final bool isLoading;
-  final String? errorMessage;
-  final List<Repository> searchResults;
-  final String searchQuery;
+class RepositoryResultView extends ConsumerStatefulWidget {
+  final bool isEmptySearchQuery;
 
-  const RepositoryResultsView({
-    super.key,
-    required this.isLoading,
-    this.errorMessage,
-    required this.searchResults,
-    required this.searchQuery,
-  });
+  const RepositoryResultView({super.key, required this.isEmptySearchQuery});
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _RepositoryResultViewState();
+}
+
+class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
+  @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    
-    if (errorMessage != null) {
-      return Center(
-        child: Text(
-          errorMessage!,
-          style: const TextStyle(color: Colors.red),
-        ),
-      );
-    }
-    
-    if (searchResults.isEmpty) {
-      return Center(
-        child: Text(
-          searchQuery.isEmpty 
-          ? AppLocalizations.of(context).home_bar_title
-          : AppLocalizations.of(context).home_search_empty,
-          style: const TextStyle(fontSize: 16),
-        ),
-      );
-    }
-    
-    return ListView.builder(
-      itemCount: searchResults.length,
-      itemBuilder: (context, index) {
-        final repo = searchResults[index];
-        return RepositoryListItem(repository: repo);
+    final AsyncValue<List<Repository>> value = ref.watch(searchStateProvider);
+
+    return value.when(
+      data: (searchResults) {
+        if (searchResults.isEmpty) {
+          return Center(
+            child: Text(
+              widget.isEmptySearchQuery
+              ? AppLocalizations.of(context).home_bar_title
+              : AppLocalizations.of(context).home_search_empty,
+              style: const TextStyle(fontSize: 16),
+            ),
+          );
+        }
+        
+        return ListView.builder(
+          itemCount: searchResults.length,
+          itemBuilder: (context, index) {
+            final repo = searchResults[index];
+            return RepositoryListItem(repository: repo);
+          },
+        );
+      }, 
+      error: (error, _) {
+        return Center(
+          child: Text(
+            error.toString(),
+            style: const TextStyle(color: Colors.red),
+          ),
+        );
       },
+      loading: () {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
     );
   }
 }
