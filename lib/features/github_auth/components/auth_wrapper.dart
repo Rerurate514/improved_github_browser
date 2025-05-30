@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
 
 import '../repositories/github_auth_repository.dart';
 import '../repositories/secure_repository.dart';
 
-class AuthWrapper extends StatefulWidget {
+class AuthWrapper extends ConsumerStatefulWidget {
   final GithubAuthRepository authRepository;
   final GithubSecureRepository secureRepository;
 
@@ -21,9 +23,8 @@ class AuthWrapper extends StatefulWidget {
   AuthWrapperState createState() => AuthWrapperState();
 }
 
-class AuthWrapperState extends State<AuthWrapper> {
+class AuthWrapperState extends ConsumerState<AuthWrapper> {
   bool _isLoading = true;
-  String? _authToken;
   String? _errorMessage;
 
   @override
@@ -35,8 +36,9 @@ class AuthWrapperState extends State<AuthWrapper> {
   Future<void> _checkAuth() async {
     try {
       final token = await widget.secureRepository.getToken();
+      ref.read(apiTokenProvider.notifier).state = token;
+
       setState(() {
-        _authToken = token;
         _isLoading = false;
       });
     } catch (e) {
@@ -59,7 +61,7 @@ class AuthWrapperState extends State<AuthWrapper> {
       setState(() {
         _isLoading = false;
         if (result.isSuccess) {
-          _authToken = result.token;
+          ref.read(apiTokenProvider.notifier).state = result.token;
         } else {
           _errorMessage = result.errorMessage;
         }
@@ -82,8 +84,8 @@ class AuthWrapperState extends State<AuthWrapper> {
       );
     }
 
-    if (_authToken != null) {
-      return SearchPage(token: _authToken!);
+    if (ref.read(apiTokenProvider.notifier).state != null) {
+      return const SearchPage();
     }
 
     return SignInPage(
