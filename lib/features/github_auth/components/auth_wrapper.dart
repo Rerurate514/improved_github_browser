@@ -27,6 +27,7 @@ class AuthWrapper extends ConsumerWidget {
         } else {
           return SignInPage(
             onSignIn: () => ref.read(authStateProvider.notifier).signIn(),
+            errorMessage: auth.errorMessage,
           );
         }
       },
