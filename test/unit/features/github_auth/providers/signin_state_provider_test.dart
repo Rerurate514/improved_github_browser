@@ -1,31 +1,43 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:github_browser/core/providers/navigator_key_provider.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
+import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/features/github_auth/repositories/github_auth_repository.dart';
 import 'package:github_browser/features/github_auth/repositories/secure_repository.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-@GenerateMocks([GithubAuthRepository, GithubSecureRepository])
+@GenerateMocks([GithubAuthRepository, GithubSecureRepository, InternetConnectionChecker])
 import 'signin_state_provider_test.mocks.dart';
 
 void main() {
+    WidgetsFlutterBinding.ensureInitialized();
+
   late MockGithubAuthRepository mockGithubAuthRepository;
   late MockGithubSecureRepository mockGithubSecureRepository;
+  late MockInternetConnectionChecker mockInternetConnectionChecker;
   late ProviderContainer container;
+  late GlobalKey<NavigatorState> mockNavigatorKey;
 
   setUp(() {
     mockGithubAuthRepository = MockGithubAuthRepository();
     mockGithubSecureRepository = MockGithubSecureRepository();
+    mockInternetConnectionChecker = MockInternetConnectionChecker();
+    mockNavigatorKey = GlobalKey<NavigatorState>();
 
     container = ProviderContainer(
       overrides: [
         githubAuthRepositoryProvider.overrideWith((_) => mockGithubAuthRepository),
         githubSecureRepositoryProvider.overrideWith((_) => mockGithubSecureRepository),
+        internetConnectionCheckerProvider.overrideWith((_) => mockInternetConnectionChecker),
+        navigatorKeyProvider.overrideWith((_) => mockNavigatorKey),
       ],
     );
   });
@@ -70,6 +82,7 @@ void main() {
   });
 
   test("サインインに成功した場合にAuthResult.successが返される", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
     when(mockGithubAuthRepository.signIn()).thenAnswer((_) => 
       Future.value(AuthResult.success("test_token"))
     );
@@ -86,6 +99,7 @@ void main() {
   });
 
   test("サインインに失敗した場合にAuthResult.failureが返される", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
     when(mockGithubAuthRepository.signIn()).thenAnswer((_) => 
       Future.value(AuthResult.failure("Failed to get token"))
     );
@@ -104,6 +118,7 @@ void main() {
   });
 
   test("サインイン処理中に例外がスローされた場合にAuthResult.failureが返される", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
     final ex = Exception("network error");
     when(mockGithubSecureRepository.getToken()).thenAnswer((_) => Future.value());
     when(mockGithubAuthRepository.signIn()).thenThrow(ex);
@@ -119,6 +134,7 @@ void main() {
   });
 
   test("サインアウト時にtokenの削除に成功する", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
     when(mockGithubSecureRepository.deleteToken()).thenAnswer((_) => Future.value());
 
     await container.read(signinStateProvider.future);
@@ -132,6 +148,7 @@ void main() {
   });
 
   test("サインアウト時に例外がスローされた場合にAsyncErrorになる", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
     final ex = Exception("network error");
     when(mockGithubSecureRepository.deleteToken()).thenThrow(ex);
 
@@ -142,6 +159,30 @@ void main() {
     expect(state, isA<AsyncError<AuthResult>>());
     expect(state.hasError, true);
     expect(state.error, ex);
+    expect(state.stackTrace, isNotNull);
+  });
+
+  test("サインイン時にネットワークエラーが起きた場合にエラーになる", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(false));
+    
+    await container.read(signinStateProvider.future);
+    await container.read(signinStateProvider.notifier).signIn();
+
+    final state = container.read(signinStateProvider);
+    expect(state, isA<AsyncError<AuthResult>>());
+    expect(state.hasError, true);
+    expect(state.stackTrace, isNotNull);
+  });
+
+  test("サインアウト時にネットワークエラーが起きた場合にエラーになる", () async {
+    when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(false));
+    
+    await container.read(signinStateProvider.future);
+    await container.read(signinStateProvider.notifier).signOut();
+
+    final state = container.read(signinStateProvider);
+    expect(state, isA<AsyncError<AuthResult>>());
+    expect(state.hasError, true);
     expect(state.stackTrace, isNotNull);
   });
 }
