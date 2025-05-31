@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:github_browser/core/exceptions/github_api_exception.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'package:github_browser/core/env/env.dart';
 
 class GitHubRepository {
@@ -38,7 +38,7 @@ class GitHubRepository {
 
       return items.map((item) => _mapToRepository(item)).toList();
     } catch (e) {
-      debugPrint('リポジトリ検索中にエラーが発生しました: $e');
+      log('リポジトリ検索中にエラーが発生しました: $e');
       rethrow;
     }
   }
@@ -54,7 +54,7 @@ class GitHubRepository {
 
       return _mapToRepository(repoData, issueCount: issueCount);
     } catch (e) {
-      debugPrint('リポジトリ詳細の取得中にエラーが発生しました: $e');
+      log('リポジトリ詳細の取得中にエラーが発生しました: $e');
       rethrow;
     }
   }
@@ -96,7 +96,7 @@ class GitHubRepository {
       final issues = jsonDecode(issuesResponse.body) as List;
       return issues.length;
     } catch (e) {
-      debugPrint('Issue数の取得中にエラーが発生しました: $e');
+      log('Issue数の取得中にエラーが発生しました: $e');
       return 0;
     }
   }

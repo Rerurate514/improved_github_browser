@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_links/app_links.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:github_browser/core/env/env.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
@@ -305,7 +305,7 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
         throw Exception('Failed to get access token: ${response.body}');
       }
     } catch (e) {
-      debugPrint('認証プロセス中にエラーが発生しました: $e');
+      log('認証プロセス中にエラーが発生しました: $e');
     } finally {
       await _linkSubscription?.cancel();
       _linkSubscription = null;
@@ -321,21 +321,21 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
     try {
       final initialLink = await appLinks.getInitialLink();
       if (initialLink != null && initialLink.queryParameters.containsKey('code')) {
-        debugPrint('初期App Linkからコードを検出: ${initialLink.queryParameters['code']}');
+        log('初期App Linkからコードを検出: ${initialLink.queryParameters['code']}');
         completer.complete(initialLink);
         return completer.future;
       }
     } catch (e) {
-      debugPrint('初期App Linkの取得エラー: $e');
+      log('初期App Linkの取得エラー: $e');
     }
     
     _linkSubscription = appLinks.uriLinkStream.listen((Uri uri) {
       if (!completer.isCompleted && uri.queryParameters.containsKey('code')) {
-        debugPrint('App Linkからコードを検出: ${uri.queryParameters['code']}');
+        log('App Linkからコードを検出: ${uri.queryParameters['code']}');
         completer.complete(uri);
       }
     }, onError: (dynamic error) {
-      debugPrint('App Linkエラー: $error');
+      log('App Linkエラー: $error');
       if (!completer.isCompleted) {
         completer.completeError(error);
       }
@@ -345,8 +345,8 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
   }
   
   Future<void> _redirectToBrowser(Uri url) async {
-    debugPrint('以下のURLをブラウザで開いてGitHubにログインしてください:');
-    debugPrint(url.toString());
+    log('以下のURLをブラウザで開いてGitHubにログインしてください:');
+    log(url.toString());
 
     urlLauncher.launch(
       url,
