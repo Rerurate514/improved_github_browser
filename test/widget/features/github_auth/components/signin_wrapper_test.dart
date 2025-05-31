@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:github_browser/core/providers/navigator_key_provider.dart';
 import 'package:github_browser/features/github_auth/components/signin_wrapper.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
+import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/features/github_auth/repositories/github_auth_repository.dart';
 import 'package:github_browser/features/github_auth/repositories/secure_repository.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
 import 'package:github_browser/pages/signin_page.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateMocks([GithubAuthRepository, GithubSecureRepository])
+@GenerateMocks([GithubAuthRepository, GithubSecureRepository, InternetConnectionChecker])
 import 'signin_wrapper_test.mocks.dart';
 
 class TestAuthNotifier extends SignInNotifier {
@@ -27,9 +30,6 @@ class TestAuthNotifier extends SignInNotifier {
   void setState(AuthResult newState) {
     _state = newState;
   }
-
-  @override
-  Future<void> signIn() async {}
 }
 
 class TestApp extends StatelessWidget {
@@ -54,12 +54,16 @@ class TestApp extends StatelessWidget {
 void main() {
   late MockGithubAuthRepository mockAuthRepository;
   late MockGithubSecureRepository mockSecureRepository;
+  late MockInternetConnectionChecker mockInternetConnectionChecker;
   late TestAuthNotifier testAuthNotifier;
+  late GlobalKey<NavigatorState> mockNavigatorKey;
 
   setUp(() {
     mockAuthRepository = MockGithubAuthRepository();
     mockSecureRepository = MockGithubSecureRepository();
+    mockInternetConnectionChecker = MockInternetConnectionChecker();
     testAuthNotifier = TestAuthNotifier();
+    mockNavigatorKey = GlobalKey<NavigatorState>();
   });
 
   Widget createAuthWrapper() {
@@ -67,7 +71,9 @@ void main() {
       overrides: [
         signinStateProvider.overrideWith(() => testAuthNotifier),
         githubAuthRepositoryProvider.overrideWithValue(mockAuthRepository),
+        internetConnectionCheckerProvider.overrideWith((_) => mockInternetConnectionChecker),
         githubSecureRepositoryProvider.overrideWithValue(mockSecureRepository),
+        navigatorKeyProvider.overrideWith((_) => mockNavigatorKey),
       ],
       child: const SignInWrapper(),
     );
@@ -135,6 +141,21 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SearchPage), findsOneWidget);
+    });
+
+    testWidgets('ネットワークエラーが起きた場合はエラーメッセージを表示すること', (WidgetTester tester) async {
+      when(mockSecureRepository.getToken()).thenAnswer((_) => Future.value('valid_token'));
+      when(mockInternetConnectionChecker.hasConnection).thenAnswer((_) => Future.value(false));
+
+      await tester.pumpWidget(createAuthWrapper());
+      await tester.pumpAndSettle();
+
+      testAuthNotifier.signIn();
+      await Future.microtask(() {});
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SignInPage), findsOneWidget);
+      expect(find.text('Network error'), findsOneWidget);
     });
   });
 }
