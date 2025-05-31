@@ -30,6 +30,8 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
   }
 
   Future<void> signIn() async {
+    state = const AsyncValue.loading();
+
     final bool isConnected = await checkNetworkConnection(
       ref: ref,
       isNotConnectedHandler: (context) {
@@ -43,8 +45,6 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
     );
 
     if(!isConnected) return;
-
-    state = const AsyncValue.loading();
     
     try {
       final result = await ref.read(githubAuthRepositoryProvider).signIn();
@@ -65,6 +65,8 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
   }
 
   Future<void> signOut() async {
+    state = const AsyncValue.loading();
+    
     final bool isConnected = await checkNetworkConnection(
       ref: ref,
       isNotConnectedHandler: (context) {
@@ -77,8 +79,6 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
       }
     );
     if(!isConnected) return;
-    
-    state = const AsyncValue.loading();
     
     try {
       await ref.read(githubSecureRepositoryProvider).deleteToken();
