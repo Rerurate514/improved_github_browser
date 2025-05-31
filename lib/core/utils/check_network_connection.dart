@@ -1,12 +1,11 @@
   import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/providers/navigator_key_provider.dart';
-import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 
 Future<bool> checkNetworkConnection(
   {
-    required AsyncNotifierProviderRef<AuthResult> ref, 
+    required Ref<dynamic> ref, 
     required void Function(BuildContext?) isNotConnectedHandler
   }
 ) async {
