@@ -4,11 +4,11 @@ import 'package:github_browser/features/github_auth/providers/github_auth_reposi
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
 
-final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthResult>(() {
-  return AuthNotifier();
+final signinStateProvider = AsyncNotifierProvider<SignInNotifier, AuthResult>(() {
+  return SignInNotifier();
 });
 
-class AuthNotifier extends AsyncNotifier<AuthResult> {
+class SignInNotifier extends AsyncNotifier<AuthResult> {
   @override
   Future<AuthResult> build() async {
     return _checkExistingAuth();

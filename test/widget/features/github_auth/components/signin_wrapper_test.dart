@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:github_browser/features/github_auth/components/auth_wrapper.dart';
+import 'package:github_browser/features/github_auth/components/signin_wrapper.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
-import 'package:github_browser/features/github_auth/providers/auth_state_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
+import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/features/github_auth/repositories/github_auth_repository.dart';
 import 'package:github_browser/features/github_auth/repositories/secure_repository.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
@@ -15,9 +15,9 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
 @GenerateMocks([GithubAuthRepository, GithubSecureRepository])
-import 'auth_wrapper_test.mocks.dart';
+import 'signin_wrapper_test.mocks.dart';
 
-class TestAuthNotifier extends AuthNotifier {
+class TestAuthNotifier extends SignInNotifier {
   AuthResult _state = AuthResult(isSuccess: false);
 
   @override
@@ -65,11 +65,11 @@ void main() {
   Widget createAuthWrapper() {
     return TestApp(
       overrides: [
-        authStateProvider.overrideWith(() => testAuthNotifier),
+        signinStateProvider.overrideWith(() => testAuthNotifier),
         githubAuthRepositoryProvider.overrideWithValue(mockAuthRepository),
         githubSecureRepositoryProvider.overrideWithValue(mockSecureRepository),
       ],
-      child: const AuthWrapper(),
+      child: const SignInWrapper(),
     );
   }
 
