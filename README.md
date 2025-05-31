@@ -207,6 +207,7 @@ flutter pub get
 - flutter_secure_storage : 9.2.4
 - url_launcher : 6.3.1
 - app_links : 6.4.0
+- internet_connection_checker : 3.0.1
 
 ### Dev Dependencies
 - flutter_lints : 5.0.0
