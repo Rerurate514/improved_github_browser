@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/components/toggle_button.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 class ThemeSettingToggle extends ConsumerStatefulWidget {
   const ThemeSettingToggle({super.key});
@@ -19,9 +19,9 @@ class _ThemeSettingToggleState extends ConsumerState<ThemeSettingToggle> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(AppLocalizations.of(context)!.settings_toggle_darkMode),
+        Text(AppLocalizations.of(context).settings_toggle_darkMode),
         ToggleButton(
-          isActive: themeMode == ThemeMode.light ? false : true,
+          isActive: themeMode != ThemeMode.light,
           isToggledCallback: (bool isToggled) {
             ref.read(themeModeProvider.notifier).setThemeMode(
               isToggled

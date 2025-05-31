@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
-  final Function(String) onSearch;
+  final void Function(String) onSearch;
   final String hint;
 
   const SearchField({

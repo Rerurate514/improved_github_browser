@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/features/github_auth/components/auth_wrapper.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
-import 'package:github_browser/pages/search_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -19,17 +19,15 @@ class MyApp extends ConsumerWidget {
     final locale = ref.watch(languageProvider).locale;
 
     return MaterialApp(
-      title: 'Flutter Demo',
-      localizationsDelegates: [
+      debugShowCheckedModeBanner: false,
+      title: 'Github_browser',
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         AppLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ja', ''),
-        const Locale('en', ''),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
       localeResolutionCallback: (locale, supportedLocales) {
         if (locale == null) return supportedLocales.first;
@@ -51,7 +49,7 @@ class MyApp extends ConsumerWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: SearchPage()
+      home: AuthWrapper()
     );
   }
 }

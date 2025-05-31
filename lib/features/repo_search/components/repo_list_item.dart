@@ -51,21 +51,6 @@ class RepositoryListItem extends StatelessWidget {
                     icon: Icons.code,
                     label: repository.projectLanguage,
                   ),
-                  const SizedBox(width: 8),
-                  InfoChip(
-                    icon: Icons.star,
-                    label: '${repository.starCount}',
-                  ),
-                  const SizedBox(width: 8),
-                  InfoChip(
-                    icon: Icons.call_split,
-                    label: '${repository.forkCount}',
-                  ),
-                  const SizedBox(width: 8),
-                  InfoChip(
-                    icon: Icons.error_outline,
-                    label: '${repository.issueCount}',
-                  ),
                 ],
               ),
             ],

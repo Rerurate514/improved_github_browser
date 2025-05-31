@@ -21,7 +21,7 @@ void main() {
     });
     
     test('RepositoryクラスからJsonを生成できる。', () {
-      final repository = Repository(
+      const repository = Repository(
         repositoryName: 'flutter',
         ownerIconUrl: 'https://example.com/icon.png',
         projectLanguage: 'Dart',
