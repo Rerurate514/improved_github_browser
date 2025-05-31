@@ -14,7 +14,7 @@ class GithubSecureRepository{
   }
 
   Future<String?> getToken() async {
-    return await _secureStorage.read(key: _tokenKey);
+    return _secureStorage.read(key: _tokenKey);
   }
 
   Future<void> deleteToken() async {

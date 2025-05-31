@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ToggleButton extends StatefulWidget {
-  final Function(bool) isToggledCallback;
+  final void Function(bool) isToggledCallback;
   final bool isActive;
   const ToggleButton({super.key, required this.isToggledCallback, this.isActive = false});
 

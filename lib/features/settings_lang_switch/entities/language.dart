@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:github_browser/core/exceptions/domain_exception.dart';
 import 'package:github_browser/features/settings_lang_switch/entities/langs.dart';
 
+@immutable
 class Language {
   final String code;
   final String name;
@@ -49,4 +51,3 @@ class Language {
   @override
   String toString() => 'Language($code: $name)';
 }
-

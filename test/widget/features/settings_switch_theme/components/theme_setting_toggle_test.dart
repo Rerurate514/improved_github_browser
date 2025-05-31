@@ -8,7 +8,7 @@ import 'package:github_browser/features/settings_theme_switch/repositories/theme
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 @GenerateMocks([ThemeRepository])
 import 'theme_setting_toggle_test.mocks.dart';

@@ -99,7 +99,7 @@ void main() {
       final streamController = StreamController<Uri>();
       when(mockAppLinks.uriLinkStream).thenAnswer((_) => streamController.stream);
       
-      httpMock(request) async {
+      Future<http.Response> httpMock(dynamic request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"access_token": "$testAccessToken", "token_type": "bearer", "scope": "repo,user"}',
@@ -143,7 +143,7 @@ void main() {
       final streamController = StreamController<Uri>();
       when(mockAppLinks.uriLinkStream).thenAnswer((_) => streamController.stream);
       
-      httpMock(request) async {
+      Future<http.Response> httpMock(dynamic request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"error": "bad_verification_code"}',
@@ -181,7 +181,7 @@ void main() {
       final initialLink = Uri.parse('$testRedirectUrl?code=initial_code');
       when(mockAppLinks.getInitialLink()).thenAnswer((_) async => initialLink);
       
-      httpMock(request) async {
+      Future<http.Response> httpMock(dynamic request) async {
         if (request.url.toString() == 'https://github.com/login/oauth/access_token') {
           return http.Response(
             '{"access_token": "$testAccessToken", "token_type": "bearer", "scope": "repo,user"}',
@@ -244,7 +244,7 @@ class _TestGithubAuthRepository extends GithubAuthRepository {
 
 class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
   final Future<http.Response> Function(http.Request) httpMock;
-  StreamSubscription? _linkSubscription;
+  StreamSubscription<dynamic>? _linkSubscription;
   
   _TestGithubAuthRepositoryWithHttpMock({
     required String clientId,
@@ -334,7 +334,7 @@ class _TestGithubAuthRepositoryWithHttpMock extends GithubAuthRepository {
         debugPrint('App Linkからコードを検出: ${uri.queryParameters['code']}');
         completer.complete(uri);
       }
-    }, onError: (error) {
+    }, onError: (dynamic error) {
       debugPrint('App Linkエラー: $error');
       if (!completer.isCompleted) {
         completer.completeError(error);

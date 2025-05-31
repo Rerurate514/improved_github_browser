@@ -35,7 +35,7 @@ void main() {
     
     expect(container.read(languageProvider), Language.japanese);
     
-    await Future.delayed(Duration.zero);
+    await Future<dynamic>.delayed(Duration.zero);
     
     verify(mockRepository.loadLang()).called(1);
   });
