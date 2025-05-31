@@ -3,6 +3,7 @@ import 'package:github_browser/core/utils/navigator_key.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
+import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -31,7 +32,8 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
   }
 
   Future<bool> _checkNetworkConnection() async {
-    final bool isConnected = await InternetConnectionChecker.instance.hasConnection;
+    final checker = ref.read(internetConnectionCheckerProvider);
+    final bool isConnected = await checker.hasConnection;
 
     if (!isConnected) {
       state = AsyncValue.error(
