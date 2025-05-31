@@ -15,31 +15,33 @@ class RepositoryInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
     final List<StatsItem> statsItems = [
       StatsItem(
         icon: Icons.code,
         value: repository.projectLanguage,
-        label: AppLocalizations.of(context).details_repository_language
+        label: appLocalizations.details_repository_language
       ),
       StatsItem(
         icon: Icons.star,
         value: repository.starCount.toString(),
-        label: AppLocalizations.of(context).details_repository_stars
+        label: appLocalizations.details_repository_stars
       ),
       StatsItem(
         icon: Icons.remove_red_eye,
         value: repository.watcherCount.toString(),
-        label: AppLocalizations.of(context).details_repository_watchers
+        label: appLocalizations.details_repository_watchers
       ),
       StatsItem(
         icon: Icons.call_split,
         value: repository.forkCount.toString(),
-        label: AppLocalizations.of(context).details_repository_forks
+        label: appLocalizations.details_repository_forks
       ),
       StatsItem(
         icon: Icons.error_outline,
         value: repository.issueCount.toString(),
-        label: AppLocalizations.of(context).details_repository_issues
+        label: appLocalizations.details_repository_issues
       ),
     ];
 
