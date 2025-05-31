@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
@@ -55,18 +56,18 @@ class GithubAuthRepository {
         basicAuth: false,
       );
 
-      debugPrint('使用するリダイレクトURL: $redirectUrl');
+      log('使用するリダイレクトURL: $redirectUrl');
       final authorizationUrl = grant.getAuthorizationUrl(redirectUrl, scopes: scopes);
-      debugPrint('GitHub認証URL: $authorizationUrl');
+      log('GitHub認証URL: $authorizationUrl');
 
       await _redirectToBrowser(authorizationUrl);
       
-      debugPrint('リダイレクトを待機中...');
+      log('リダイレクトを待機中...');
       final responseUrl = await _listenForAppLink();
-      debugPrint('リダイレクトURLを受信: $responseUrl');
+      log('リダイレクトURLを受信: $responseUrl');
       
-      debugPrint('認証レスポンスを処理中...');
-      debugPrint('レスポンスパラメータ: ${responseUrl.queryParameters}');
+      log('認証レスポンスを処理中...');
+      log('レスポンスパラメータ: ${responseUrl.queryParameters}');
 
       final code = responseUrl.queryParameters['code'];
       if (code == null) return AuthResult.failure("responseUrl.queryParameters code is null");
@@ -94,8 +95,8 @@ class GithubAuthRepository {
         throw Exception('Failed to get access token: ${response.body}');
       }
     } catch (e, stackTrace) {
-      debugPrint('認証プロセス中にエラーが発生しました: $e');
-      debugPrint('スタックトレース: $stackTrace');
+      log('認証プロセス中にエラーが発生しました: $e');
+      log('スタックトレース: $stackTrace');
     } finally {
       await _linkSubscription?.cancel();
       _linkSubscription = null;
@@ -110,21 +111,21 @@ class GithubAuthRepository {
     try {
       final initialLink = await appLinks.getInitialLink();
       if (initialLink != null && initialLink.queryParameters.containsKey('code')) {
-        debugPrint('初期App Linkからコードを検出: ${initialLink.queryParameters['code']}');
+        log('初期App Linkからコードを検出: ${initialLink.queryParameters['code']}');
         completer.complete(initialLink);
         return completer.future;
       }
     } catch (e) {
-      debugPrint('初期App Linkの取得エラー: $e');
+      log('初期App Linkの取得エラー: $e');
     }
     
     _linkSubscription = appLinks.uriLinkStream.listen((Uri uri) {
       if (!completer.isCompleted && uri.queryParameters.containsKey('code')) {
-        debugPrint('App Linkからコードを検出: ${uri.queryParameters['code']}');
+        log('App Linkからコードを検出: ${uri.queryParameters['code']}');
         completer.complete(uri);
       }
     }, onError: (dynamic error) {
-      debugPrint('App Linkエラー: $error');
+      log('App Linkエラー: $error');
       if (!completer.isCompleted) {
         completer.completeError(error);
       }
@@ -134,8 +135,8 @@ class GithubAuthRepository {
   }
   
   Future<void> _redirectToBrowser(Uri url) async {
-    debugPrint('以下のURLをブラウザで開いてGitHubにログインしてください:');
-    debugPrint(url.toString());
+    log('以下のURLをブラウザで開いてGitHubにログインしてください:');
+    log(url.toString());
 
     urlLauncher.launch(
       url,
