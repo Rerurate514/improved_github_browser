@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:github_browser/features/repo_details/entities/stats_item.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 
@@ -14,6 +15,36 @@ class RepositoryInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    final List<StatsItem> statsItems = [
+      StatsItem(
+        icon: Icons.code,
+        value: repository.projectLanguage,
+        label: appLocalizations.details_repository_language
+      ),
+      StatsItem(
+        icon: Icons.star,
+        value: repository.starCount.toString(),
+        label: appLocalizations.details_repository_stars
+      ),
+      StatsItem(
+        icon: Icons.remove_red_eye,
+        value: repository.watcherCount.toString(),
+        label: appLocalizations.details_repository_watchers
+      ),
+      StatsItem(
+        icon: Icons.call_split,
+        value: repository.forkCount.toString(),
+        label: appLocalizations.details_repository_forks
+      ),
+      StatsItem(
+        icon: Icons.error_outline,
+        value: repository.issueCount.toString(),
+        label: appLocalizations.details_repository_issues
+      ),
+    ];
+
     return Card(
       margin: const EdgeInsets.all(16),
       elevation: 2,
@@ -29,8 +60,8 @@ class RepositoryInfoCard extends StatelessWidget {
               Text(
                 repository.repositoryName,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               
               const SizedBox(height: 12),
@@ -63,36 +94,7 @@ class RepositoryInfoCard extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, constraints) {
                   final int columns = max(1, (constraints.maxWidth / 150).floor());
-                  
-                  // リポジトリ統計情報の項目リスト
-                  final List<Map<String, dynamic>> statsItems = [
-                    {
-                      'icon': Icons.code, 
-                      'value': repository.projectLanguage, 
-                      'label': AppLocalizations.of(context).details_repository_language
-                    },
-                    {
-                      'icon': Icons.star, 
-                      'value': repository.starCount.toString(), 
-                      'label': AppLocalizations.of(context).details_repository_stars
-                    },
-                    {
-                      'icon': Icons.remove_red_eye, 
-                      'value': repository.watcherCount.toString(), 
-                      'label': AppLocalizations.of(context).details_repository_watchers
-                    },
-                    {
-                      'icon': Icons.call_split, 
-                      'value': repository.forkCount.toString(), 
-                      'label': AppLocalizations.of(context).details_repository_forks
-                    },
-                    {
-                      'icon': Icons.error_outline, 
-                      'value': repository.issueCount.toString(), 
-                      'label': AppLocalizations.of(context).details_repository_issues
-                    },
-                  ];
-                  
+
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -106,9 +108,9 @@ class RepositoryInfoCard extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = statsItems[index];
                       return _buildStatItem(
-                        item['icon'],
-                        item['value'],
-                        item['label'],
+                        item.icon,
+                        item.value,
+                        item.label,
                       );
                     },
                   );
@@ -122,9 +124,10 @@ class RepositoryInfoCard extends StatelessWidget {
   }
 
   Widget _buildStatItem(IconData icon, String value, String label) {
-    return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.circular(8),
+    return Card(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
@@ -149,4 +152,4 @@ class RepositoryInfoCard extends StatelessWidget {
       ),
     );
   }
-}
+} 
