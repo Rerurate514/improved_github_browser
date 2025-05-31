@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github_browser/features/repo_search/components/repo_list_item.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
 class RepositoryResultsView extends StatelessWidget {
   final bool isLoading;
@@ -38,8 +38,8 @@ class RepositoryResultsView extends StatelessWidget {
       return Center(
         child: Text(
           searchQuery.isEmpty 
-          ? AppLocalizations.of(context)!.home_bar_title
-          : AppLocalizations.of(context)!.home_search_empty,
+          ? AppLocalizations.of(context).home_bar_title
+          : AppLocalizations.of(context).home_search_empty,
           style: const TextStyle(fontSize: 16),
         ),
       );
