@@ -32,7 +32,7 @@
   "error_issue_fetch_failed": "Error occurred while getting issues count",
   "error_apiRequest_failed": "GitHub API request failed",
 
-  "error_network": "Network error occurred",
+  "error_network": "Network error occurred, Please check your network environment.",
   "error_not_found": "Repository not found",
   "error_general": "An error occurred. Please try again.",
   

@@ -32,7 +32,7 @@
   "error_issue_fetch_failed": "Issue数の取得中にエラーが発生しました",
   "error_apiRequest_failed": "GitHub API リクエストに失敗しました",
 
-  "error_network": "ネットワークエラーが発生しました",
+  "error_network": "ネットワークエラーが発生しました。ネットワーク環境を確認してください。",
   "error_not_found": "リポジトリが見つかりませんでした",
   "error_general": "エラーが発生しました。もう一度お試しください",
   
