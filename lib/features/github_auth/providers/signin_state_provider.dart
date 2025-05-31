@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_browser/core/utils/navigator_key.dart';
+import 'package:github_browser/core/providers/navigator_key_provider.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
@@ -35,8 +35,14 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
     final bool isConnected = await checker.hasConnection;
 
     if (!isConnected) {
+      final navigatorKey = ref.read(navigatorKeyProvider);
+      final context = navigatorKey.currentContext;
+      
       state = AsyncValue.error(
-        AppLocalizations.of(navigatorKey.currentContext!).error_network,
+        context != null 
+          // ignore: use_build_context_synchronously
+          ? AppLocalizations.of(context).error_network
+          : 'Network error',
         StackTrace.current
       );
     }

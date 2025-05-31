@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/core/providers/navigator_key_provider.dart';
 import 'package:github_browser/core/providers/shared_prefs_cache_provider.dart';
-import 'package:github_browser/core/utils/navigator_key.dart';
 import 'package:github_browser/features/github_auth/components/signin_wrapper.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
@@ -28,6 +28,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(languageProvider).locale;
+    final navigatorKey = ref.read(navigatorKeyProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
