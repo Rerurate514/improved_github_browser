@@ -6,7 +6,6 @@ import 'package:github_browser/features/github_auth/providers/github_secure_repo
 import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final signinStateProvider = AsyncNotifierProvider<SignInNotifier, AuthResult>(() {
   return SignInNotifier();
