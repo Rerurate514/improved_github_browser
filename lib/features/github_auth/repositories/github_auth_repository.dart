@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:app_links/app_links.dart';
-import 'package:flutter/material.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:github_browser/core/env/env.dart';
