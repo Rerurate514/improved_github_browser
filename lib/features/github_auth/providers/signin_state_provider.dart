@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_browser/core/providers/navigator_key_provider.dart';
+import 'package:github_browser/core/utils/check_network_connection.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
-import 'package:github_browser/features/github_auth/providers/internet_connection_checker_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 
@@ -30,28 +29,19 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
     }
   }
 
-  Future<bool> _checkNetworkConnection() async {
-    final checker = ref.read(internetConnectionCheckerProvider);
-    final bool isConnected = await checker.hasConnection;
-
-    if (!isConnected) {
-      final navigatorKey = ref.read(navigatorKeyProvider);
-      final context = navigatorKey.currentContext;
-      
-      state = AsyncValue.error(
-        context != null 
-          // ignore: use_build_context_synchronously
-          ? AppLocalizations.of(context).error_network
-          : 'Network error',
-        StackTrace.current
-      );
-    }
-
-    return isConnected;
-  }
-
   Future<void> signIn() async {
-    final bool isConnected = await _checkNetworkConnection();
+    final bool isConnected = await checkNetworkConnection(
+      ref: ref,
+      isNotConnectedHandler: (context) {
+        state = AsyncValue.error(
+          context != null 
+            ? AppLocalizations.of(context).error_network
+            : 'Network error',
+          StackTrace.current
+        );
+      }
+    );
+
     if(!isConnected) return;
 
     state = const AsyncValue.loading();
@@ -75,7 +65,17 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
   }
 
   Future<void> signOut() async {
-    final bool isConnected = await _checkNetworkConnection();
+    final bool isConnected = await checkNetworkConnection(
+      ref: ref,
+      isNotConnectedHandler: (context) {
+        state = AsyncValue.error(
+          context != null 
+            ? AppLocalizations.of(context).error_network
+            : 'Network error',
+          StackTrace.current
+        );
+      }
+    );
     if(!isConnected) return;
     
     state = const AsyncValue.loading();
