@@ -184,3 +184,30 @@ flutter pub get
 おそらく、メールにて`key.jks`と`key.properties`の中身が送信されているかと思います。
 - `key.jks`は`android/app/`内に格納
 - `key.properties`は`android/`直下に格納
+
+## 使用しているバージョン情報
+### Core
+- flutter : 3.32.0
+    - 使用しているバージョンはプロジェクトルートの`.fvmrc`に記載しています。
+- SDK : 3.7.2
+
+### Dependencies
+- cupertino_icons : 1.0.8
+- freezed : 3.0.6
+- build_runner : 2.4.15
+- freezed_annotation : 3.0.0
+- json_annotation : 4.9.0
+- json_serializable : 6.9.4
+- flutter_riverpod : 2.6.1
+- shared_preferences : 2.5.3
+- envied : 1.1.1
+- mockito : 5.4.5
+- intl : 0.20.2
+- oauth2 : 2.0.3
+- flutter_secure_storage : 9.2.4
+- url_launcher : 6.3.1
+- app_links : 6.4.0
+
+### Dev Dependencies
+- flutter_lints : 5.0.0
+- envied_generator : 1.1.1
