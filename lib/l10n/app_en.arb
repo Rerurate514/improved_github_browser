@@ -34,7 +34,8 @@
 
   "error_network": "Network error occurred, Please check your network environment.",
   "error_not_found": "Repository not found",
-  "error_general": "An error occurred. Please try again.",
+  "error_data_format": "Data format error occurred. Please try again.",
+  "error_general": "An unexpected error occurred. Please try again later.",
   
   "button_retry": "Retry",
   "button_view_on_github": "View on GitHub",

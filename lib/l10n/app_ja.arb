@@ -34,7 +34,8 @@
 
   "error_network": "ネットワークエラーが発生しました。ネットワーク環境を確認してください。",
   "error_not_found": "リポジトリが見つかりませんでした",
-  "error_general": "エラーが発生しました。もう一度お試しください",
+  "error_data_format": "データの形式エラーが発生しました。もう一度お試しください。",
+  "error_general": "予期しないエラーが発生しました。しばらく時間をおいてからもう一度お試しください。",
   
   "button_retry": "再試行",
   "button_view_on_github": "GitHubで見る",
