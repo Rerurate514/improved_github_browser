@@ -1,100 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/features/github_auth/providers/auth_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
 
-import '../repositories/github_auth_repository.dart';
-import '../repositories/secure_repository.dart';
-
-class AuthWrapper extends StatefulWidget {
-  final GithubAuthRepository authRepository;
-  final GithubSecureRepository secureRepository;
-
-  AuthWrapper({
-    super.key,
-    GithubAuthRepository? authRepository,
-    GithubSecureRepository? secureRepository,
-  }) : 
-    authRepository = authRepository ?? GithubAuthRepository(),
-    secureRepository = secureRepository ?? GithubSecureRepository();
+class AuthWrapper extends ConsumerWidget {
+  const AuthWrapper({super.key});
 
   @override
-  AuthWrapperState createState() => AuthWrapperState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authStateProvider);
 
-class AuthWrapperState extends State<AuthWrapper> {
-  bool _isLoading = true;
-  String? _authToken;
-  String? _errorMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkAuth();
-  }
-
-  Future<void> _checkAuth() async {
-    try {
-      final token = await widget.secureRepository.getToken();
-      setState(() {
-        _authToken = token;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      final result = await widget.authRepository.signIn();
-      
-      setState(() {
-        _isLoading = false;
-        if (result.isSuccess) {
-          _authToken = result.token;
-        } else {
-          _errorMessage = result.errorMessage;
-        }
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
+    return authState.when(
+      loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
-      );
-    }
-
-    if (_authToken != null) {
-      return SearchPage(token: _authToken!);
-    }
-
-    return SignInPage(
-      onSignIn: _signIn,
-      errorMessage: _errorMessage,
+      ),
+      error: (error, stackTrace) => SignInPage(
+        onSignIn: () => ref.read(authStateProvider.notifier).signIn(),
+        errorMessage: error.toString(),
+      ),
+      data: (auth) {
+        if (auth.isSuccess) {
+          return const SearchPage();
+        } else {
+          return SignInPage(
+            onSignIn: () => ref.read(authStateProvider.notifier).signIn(),
+            errorMessage: auth.errorMessage,
+          );
+        }
+      },
     );
   }
 }
 
 class SignInPage extends StatelessWidget {
-  final Future<void> Function() onSignIn;
+  final VoidCallback onSignIn;
   final String? errorMessage;
 
   const SignInPage({

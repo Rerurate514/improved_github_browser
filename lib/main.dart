@@ -59,7 +59,7 @@ class MyApp extends ConsumerWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: AuthWrapper()
+      home: const AuthWrapper()
     );
   }
 }
