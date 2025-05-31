@@ -154,4 +154,82 @@ void main() {
 
     expect(updatedEnRadio.value, Language.english);
   });
+
+  testWidgets('Radioボタンが正しく表示されること', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          languageRepositoryProvider.overrideWith((_) => mockRepository),
+        ],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                LanguageSettingsButtons(),
+              ]
+            )
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(Radio<Language>), findsNWidgets(Langs.values.length));
+  });
+
+  testWidgets('Radioボタンをタップして言語変更が動作すること', (WidgetTester tester) async {
+    when(mockRepository.saveLang(any)).thenAnswer((_) async {});
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          languageRepositoryProvider.overrideWith((_) => mockRepository),
+        ],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                LanguageSettingsButtons(),
+              ]
+            )
+          ),
+        ),
+      ),
+    );
+
+    final englishRadio = find.byWidgetPredicate(
+      (widget) => widget is Radio<Language> && widget.value == Language.english
+    );
+    
+    await tester.tap(englishRadio);
+    await tester.pump();
+
+    verify(mockRepository.saveLang(Language.english)).called(1);
+  });
+
+  testWidgets('初期状態で正しい言語が選択されていること', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          languageRepositoryProvider.overrideWith((_) => mockRepository),
+        ],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                LanguageSettingsButtons(),
+              ]
+            )
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    final radios = tester.widgetList<Radio<Language>>(find.byType(Radio<Language>));
+    final selectedRadios = radios.where((radio) => radio.groupValue == radio.value);
+    
+    expect(selectedRadios.length, equals(1));
+    expect(selectedRadios.first.value, equals(Language.japanese));
+  });
 }
