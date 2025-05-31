@@ -22,7 +22,7 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
       if (token != null && token.isNotEmpty) {
         return AuthResult(isSuccess: true, token: token);
       } else {
-        return AuthResult(isSuccess: false);
+        return AuthResult(isSuccess: false); //ここは失敗=Errorではないので、AuthResultを使用
       }
     } catch (e) {
       return AuthResult(isSuccess: false, errorMessage: e.toString());
