@@ -35,11 +35,13 @@ class RepositoryResultsView extends StatelessWidget {
     }
     
     if (searchResults.isEmpty) {
+      final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
       return Center(
         child: Text(
           searchQuery.isEmpty 
-          ? AppLocalizations.of(context).home_bar_title
-          : AppLocalizations.of(context).home_search_empty,
+          ? appLocalizations.home_bar_title
+          : appLocalizations.home_search_empty,
           style: const TextStyle(fontSize: 16),
         ),
       );
