@@ -1,14 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/core/utils/check_network_connection.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
-final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthResult>(() {
-  return AuthNotifier();
+final signinStateProvider = AsyncNotifierProvider<SignInNotifier, AuthResult>(() {
+  return SignInNotifier();
 });
 
-class AuthNotifier extends AsyncNotifier<AuthResult> {
+class SignInNotifier extends AsyncNotifier<AuthResult> {
   @override
   Future<AuthResult> build() async {
     return _checkExistingAuth();
@@ -29,6 +31,20 @@ class AuthNotifier extends AsyncNotifier<AuthResult> {
 
   Future<void> signIn() async {
     state = const AsyncValue.loading();
+
+    final bool isConnected = await checkNetworkConnection(
+      ref: ref,
+      isNotConnectedHandler: (context) {
+        state = AsyncValue.error(
+          context != null 
+            ? AppLocalizations.of(context).error_network
+            : 'Network error',
+          StackTrace.current
+        );
+      }
+    );
+
+    if(!isConnected) return;
     
     try {
       final result = await ref.read(githubAuthRepositoryProvider).signIn();
@@ -50,6 +66,19 @@ class AuthNotifier extends AsyncNotifier<AuthResult> {
 
   Future<void> signOut() async {
     state = const AsyncValue.loading();
+    
+    final bool isConnected = await checkNetworkConnection(
+      ref: ref,
+      isNotConnectedHandler: (context) {
+        state = AsyncValue.error(
+          context != null 
+            ? AppLocalizations.of(context).error_network
+            : 'Network error',
+          StackTrace.current
+        );
+      }
+    );
+    if(!isConnected) return;
     
     try {
       await ref.read(githubSecureRepositoryProvider).deleteToken();
