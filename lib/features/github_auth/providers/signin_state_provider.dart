@@ -3,6 +3,7 @@ import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/github_auth_repository_provider.dart';
 import 'package:github_browser/features/github_auth/providers/github_secure_repository_provider.dart';
 import 'package:github_browser/features/repo_search/providers/api_token_provider.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final signinStateProvider = AsyncNotifierProvider<SignInNotifier, AuthResult>(() {
   return SignInNotifier();
@@ -27,7 +28,23 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
     }
   }
 
+  Future<bool> _checkNetworkConnection() async {
+    final bool isConnected = await InternetConnectionChecker.instance.hasConnection;
+
+    if (!isConnected) {
+      state = AsyncValue.error(
+        "Network Error",
+        StackTrace.current
+      );
+    }
+
+    return isConnected;
+  }
+
   Future<void> signIn() async {
+    final bool isConnected = await _checkNetworkConnection();
+    if(!isConnected) return;
+
     state = const AsyncValue.loading();
     
     try {
@@ -49,6 +66,9 @@ class SignInNotifier extends AsyncNotifier<AuthResult> {
   }
 
   Future<void> signOut() async {
+    final bool isConnected = await _checkNetworkConnection();
+    if(!isConnected) return;
+    
     state = const AsyncValue.loading();
     
     try {
