@@ -10,6 +10,7 @@ import 'package:github_browser/features/github_auth/repositories/github_auth_rep
 import 'package:github_browser/features/github_auth/repositories/secure_repository.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:github_browser/pages/search_page.dart';
+import 'package:github_browser/pages/signin_page.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
