@@ -67,9 +67,11 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).home_bar_title),
+        title: Text(appLocalizations.home_bar_title),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -86,7 +88,7 @@ class SearchPageState extends State<SearchPage> {
           children: [
             SearchField(
               onSearch: _handleSearch,
-              hint: AppLocalizations.of(context).home_search_hint,
+              hint: appLocalizations.home_search_hint,
             ),
             const SizedBox(height: 20),
             
