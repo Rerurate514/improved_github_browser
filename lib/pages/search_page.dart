@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/components/search_field.dart';
-import 'package:github_browser/core/routes/page_router.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
 import 'package:github_browser/features/repo_search/providers/search_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -35,7 +35,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              PageRouter.navigateSettingsPage(context);
+              context.push("/setting");
             },
           ),
         ],
