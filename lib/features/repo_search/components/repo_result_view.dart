@@ -39,7 +39,7 @@ class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
   void _onScroll() {
     if (!_scrollController.hasClients) return;
     
-    const threshold = 200.0;log("${_scrollController.position.extentAfter} < $threshold");
+    const threshold = 200.0;
     if (_scrollController.position.extentAfter < threshold) {
       final notifier = ref.read(searchStateProvider.notifier);
       notifier.loadMoreRepositories();
