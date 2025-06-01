@@ -4,8 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/core/exceptions/github_api_exception.dart';
 import 'package:github_browser/features/repo_search/components/repo_list_item.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
+import 'package:github_browser/features/repo_search/providers/search_state_notifier.dart';
 import 'package:github_browser/features/repo_search/providers/search_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 
@@ -19,9 +21,35 @@ class RepositoryResultView extends ConsumerStatefulWidget {
 }
 
 class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    
+    const threshold = 200.0;log("${_scrollController.position.extentAfter} < $threshold");
+    if (_scrollController.position.extentAfter < threshold) {
+      final notifier = ref.read(searchStateProvider.notifier);
+      notifier.loadMoreRepositories();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Repository>> value = ref.watch(searchStateProvider);
+    final searchNotifier = ref.read(searchStateProvider.notifier);
 
     return value.when(
       data: (searchResults) {
@@ -37,8 +65,13 @@ class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
         }
         
         return ListView.builder(
+          controller: _scrollController,
           itemCount: searchResults.length,
           itemBuilder: (context, index) {
+            if (index == searchResults.length) {
+              return _buildLoadingIndicator(searchNotifier);
+            }
+
             final repo = searchResults[index];
             return RepositoryListItem(repository: repo);
           },
@@ -51,6 +84,8 @@ class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
           errorMessage = AppLocalizations.of(context).error_network;
         } else if (error is FormatException) {
           errorMessage = AppLocalizations.of(context).error_data_format;
+        } else if(error is GitHubApiException){
+          errorMessage = "${AppLocalizations.of(context).error_general} // ${error.message}";
         } else {
           log('Repository search error: $error');
           errorMessage = AppLocalizations.of(context).error_general;
@@ -69,5 +104,18 @@ class _RepositoryResultViewState extends ConsumerState<RepositoryResultView> {
         );
       }
     );
+  }
+
+  Widget _buildLoadingIndicator(SearchStateNotifier notifier) {
+    if (notifier.isLoadingMore) {
+      return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    
+    return const SizedBox.shrink();
   }
 }
