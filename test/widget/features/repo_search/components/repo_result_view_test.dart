@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,27 +12,18 @@ import 'package:github_browser/features/repo_search/providers/search_state_provi
 import 'package:github_browser/l10n/app_localizations.dart';
 
 class TestSearchNotifier extends SearchStateNotifier {
-  final AsyncValue<List<Repository>> _state = const AsyncData([]);
+  final AsyncValue<List<Repository>> _currentState;
+  bool _loadMoreCalled = false;
+
+  TestSearchNotifier(this._currentState);
 
   @override
-  AsyncValue<List<Repository>> build() => _state;
-
-  // ignore: use_setters_to_change_properties
-  void setState(AsyncValue<List<Repository>> newState) {
-    state = newState;
-  }
-
-  bool _loadMoreCalled = false;
+  AsyncValue<List<Repository>> build() => _currentState;
 
   bool get loadMoreCalled => _loadMoreCalled;
 
   void triggerLoadMore() {
     _loadMoreCalled = true;
-  }
-
-  // ignore: unreachable_from_main
-  void resetLoadMore() {
-    _loadMoreCalled = false;
   }
 }
 
@@ -47,11 +38,7 @@ class TestApp extends StatelessWidget {
     return ProviderScope(
       overrides: overrides,
       child: MaterialApp(
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-          DefaultMaterialLocalizations.delegate,
-        ],
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: child,
       ),
@@ -60,10 +47,12 @@ class TestApp extends StatelessWidget {
 }
 
 void main() {
+  setUpAll(() => HttpOverrides.global = null);
+
   final sampleRepositories = [
     const Repository(
       repositoryName: 'repo1',
-      ownerIconUrl: 'url1',
+      ownerIconUrl: 'https://avatars.githubusercontent.com/u/25350310?v=4',
       projectLanguage: 'Dart',
       starCount: 100,
       watcherCount: 50,
@@ -72,8 +61,8 @@ void main() {
     ),
     const Repository(
       repositoryName: 'repo2',
-      ownerIconUrl: 'url2',
-      projectLanguage: 'Kotlin',
+      ownerIconUrl: 'https://avatars.githubusercontent.com/u/25350310?v=4',
+      projectLanguage: 'Flutter',
       starCount: 200,
       watcherCount: 100,
       forkCount: 50,
@@ -86,8 +75,7 @@ void main() {
     required AsyncValue<List<Repository>> initialState,
     TestSearchNotifier? customNotifier,
   }) {
-    final notifier = customNotifier ?? TestSearchNotifier();
-    notifier.setState(initialState);
+    final notifier = customNotifier ?? TestSearchNotifier(initialState);
     
     return TestApp(
       overrides: [
@@ -98,29 +86,39 @@ void main() {
   }
 
   group('RepositoryResultView', () {
-    testWidgets('Empty search query shows home title', (WidgetTester tester) async {
+    testWidgets('検索クエリが空の場合、ホームタイトルが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: true,
         initialState: const AsyncValue.data([]),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('GitHub リポジトリ検索'), findsOneWidget);
+      expect(find.text('Search GitHub Repositories'), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
     });
 
-    testWidgets('Empty results show no results message', (WidgetTester tester) async {
+    testWidgets('検索結果が空の場合、「結果がありません」メッセージが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: const AsyncValue.data([]),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('検索結果がありません。'), findsOneWidget);
+      expect(find.text('No search results found'), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
     });
 
-    testWidgets('Search results display correctly', (WidgetTester tester) async {
+    testWidgets('読み込み中にプログレスインジケータが表示されること', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget(
+        isEmptySearchQuery: false,
+        initialState: const AsyncValue.loading(),
+      ));
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+    });
+
+    testWidgets('検索結果が正しく表示されることを確認', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: AsyncValue.data(sampleRepositories),
@@ -133,43 +131,33 @@ void main() {
       expect(find.text('repo2'), findsOneWidget);
     });
 
-    testWidgets('Loading state shows progress indicator', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget(
-        isEmptySearchQuery: false,
-        initialState: const AsyncValue.loading(),
-      ));
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(find.byType(ListView), findsNothing);
-    });
-
-    testWidgets('Network error shows error message', (WidgetTester tester) async {
+    testWidgets('ネットワークエラー時にエラーメッセージが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: AsyncValue.error(
-          const SocketException('No Internet'),
+          const SocketException(""),
           StackTrace.current,
         ),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('ネットワークエラーが発生しました。'), findsOneWidget);
+      expect(find.text('Network error occurred, Please check your network environment.'), findsOneWidget);
     });
 
-    testWidgets('Format error shows data format error message', (WidgetTester tester) async {
+    testWidgets('データ形式エラー時にエラーメッセージが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: AsyncValue.error(
-          const FormatException('Invalid JSON'),
+          const FormatException(),
           StackTrace.current,
         ),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('データの形式が正しくありません。'), findsOneWidget);
+      expect(find.text('Data format error occurred. Please try again.'), findsOneWidget);
     });
 
-    testWidgets('GitHub API error shows general error message', (WidgetTester tester) async {
+    testWidgets('GitHub APIエラー時に一般的なエラーメッセージが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: AsyncValue.error(
@@ -179,33 +167,34 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('エラーが発生しました。'), findsOneWidget);
+      expect(find.textContaining('Rate Limit Exceeded'), findsOneWidget);
     });
 
-    testWidgets('Unknown error shows general error message', (WidgetTester tester) async {
+    testWidgets('未知のエラー時に一般的なエラーメッセージが表示されること', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
         initialState: AsyncValue.error(
-          Exception('Unknown Error'),
+          Exception(),
           StackTrace.current,
         ),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('エラーが発生しました。'), findsOneWidget);
+      expect(find.text('An unexpected error occurred. Please try again later.'), findsOneWidget);
     });
 
-    testWidgets('Scrolling behavior test', (WidgetTester tester) async {
-      final testNotifier = TestSearchNotifier();
+    testWidgets('スクロール動作がloadMoreをトリガーすることを確認', (WidgetTester tester) async {
       final largeList = List.generate(30, (index) => Repository(
         repositoryName: 'repo$index',
-        ownerIconUrl: 'url$index',
+        ownerIconUrl: 'https://avatars.githubusercontent.com/u/25350310?v=4',
         projectLanguage: 'Dart',
         starCount: 100 + index,
         watcherCount: 50 + index,
         forkCount: 25 + index,
         issueCount: 10 + index,
       ));
+
+      final testNotifier = TestSearchNotifier(AsyncValue.data(largeList));
 
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
@@ -227,8 +216,8 @@ void main() {
       expect(testNotifier.loadMoreCalled, isTrue);
     });
 
-    testWidgets('Small scroll does not trigger load more', (WidgetTester tester) async {
-      final testNotifier = TestSearchNotifier();
+    testWidgets('小さなスクロールではloadMoreがトリガーされないこと', (WidgetTester tester) async {
+      final testNotifier = TestSearchNotifier(AsyncValue.data(sampleRepositories));
 
       await tester.pumpWidget(createTestWidget(
         isEmptySearchQuery: false,
