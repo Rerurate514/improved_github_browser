@@ -79,7 +79,7 @@ void main() {
     );
   }
 
-  group('AuthWrapper Widget Tests', () {
+  group('SignInWrapper', () {
     testWidgets('トークンがない場合はSignInPageを表示すること', (WidgetTester tester) async {
       when(mockSecureRepository.getToken()).thenAnswer((_) => Future.value());
 

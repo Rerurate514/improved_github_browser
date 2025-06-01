@@ -20,7 +20,7 @@ void main() {
     );
   });
 
-  group('GithubSecureRepository Tests', () {
+  group('GithubSecureRepository', () {
     test('saveTokenは正しいパラメータでセキュアストレージのwriteを呼び出すこと', () async {
       const String token = 'test_token';
       when(mockSecureStorage.write(key: anyNamed('key'), value: anyNamed('value')))

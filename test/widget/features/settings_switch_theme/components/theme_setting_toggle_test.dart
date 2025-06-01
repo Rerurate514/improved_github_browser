@@ -19,16 +19,12 @@ void main() {
 
   setUp(() {
     mockRepository = MockThemeRepository();
-    
-    when(mockRepository.loadThemeMode())
-        .thenAnswer((_) async => ThemeMode.light);
-    when(mockRepository.saveThemeMode(any))
-        .thenAnswer((_) async {});
+
+    when(mockRepository.loadThemeMode()).thenAnswer((_) async => ThemeMode.light);
+    when(mockRepository.saveThemeMode(any)).thenAnswer((_) async {});
 
     providerScope = ProviderScope(
-      overrides: [
-        themeRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [themeRepositoryProvider.overrideWithValue(mockRepository)],
       child: const MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -36,69 +32,63 @@ void main() {
           GlobalCupertinoLocalizations.delegate,
           AppLocalizations.delegate,
         ],
-        supportedLocales: [
-          Locale('ja', ''),
-          Locale('en', ''),
-        ],
+        supportedLocales: [Locale('ja', ''), Locale('en', '')],
         locale: Locale('ja', ''),
-        home: Scaffold(
-          body: ThemeSettingToggle(),
-        ),
+        home: Scaffold(body: ThemeSettingToggle()),
       ),
     );
   });
 
-  testWidgets('ThemeSettingToggleが正しく表示されること', (WidgetTester tester) async {
-    await tester.pumpWidget(providerScope);
-    
-    await tester.pumpAndSettle();
+  group("ThemeSettingToggle", () {
+    testWidgets('ThemeSettingToggleが正しく表示されること', (WidgetTester tester) async {
+      await tester.pumpWidget(providerScope);
 
-    expect(find.text("ダークモードを有効化"), findsOneWidget);
-    
-    expect(find.byType(ToggleButton), findsOneWidget);
-  });
+      await tester.pumpAndSettle();
 
-  testWidgets('初期状態でライトモードの場合、トグルがオフになっていること', (WidgetTester tester) async {
-    when(mockRepository.loadThemeMode())
-        .thenAnswer((_) async => ThemeMode.light);
-    
-    await tester.pumpWidget(providerScope);
-    await tester.pumpAndSettle();
+      expect(find.text("ダークモードを有効化"), findsOneWidget);
 
-    final toggleFinder = find.byType(ToggleButton);
-    final ToggleButton toggle = tester.widget(toggleFinder);
-    
-    expect(toggle.isActive, false);
-  });
+      expect(find.byType(ToggleButton), findsOneWidget);
+    });
 
-  testWidgets('初期状態でダークモードの場合、トグルがオンになっていること', (WidgetTester tester) async {
-    when(mockRepository.loadThemeMode())
-        .thenAnswer((_) async => ThemeMode.dark);
-    
-    await tester.pumpWidget(providerScope);
-    await tester.pumpAndSettle();
+    testWidgets('初期状態でライトモードの場合、トグルがオフになっていること', (WidgetTester tester) async {
+      when(mockRepository.loadThemeMode()).thenAnswer((_) async => ThemeMode.light);
 
-    final toggleFinder = find.byType(ToggleButton);
-    final ToggleButton toggle = tester.widget(toggleFinder);
-    
-    expect(toggle.isActive, true);
-  });
+      await tester.pumpWidget(providerScope);
+      await tester.pumpAndSettle();
 
-  testWidgets('トグルをタップするとテーマモードが切り替わること', (WidgetTester tester) async {
-    when(mockRepository.loadThemeMode())
-        .thenAnswer((_) async => ThemeMode.light);
-    
-    await tester.pumpWidget(providerScope);
-    await tester.pumpAndSettle();
+      final toggleFinder = find.byType(ToggleButton);
+      final ToggleButton toggle = tester.widget(toggleFinder);
 
-    await tester.tap(find.byType(ToggleButton));
-    await tester.pumpAndSettle();
+      expect(toggle.isActive, false);
+    });
 
-    verify(mockRepository.saveThemeMode(ThemeMode.dark)).called(1);
+    testWidgets('初期状態でダークモードの場合、トグルがオンになっていること', (WidgetTester tester) async {
+      when(mockRepository.loadThemeMode()).thenAnswer((_) async => ThemeMode.dark);
 
-    await tester.tap(find.byType(ToggleButton));
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(providerScope);
+      await tester.pumpAndSettle();
 
-    verify(mockRepository.saveThemeMode(ThemeMode.light)).called(1);
+      final toggleFinder = find.byType(ToggleButton);
+      final ToggleButton toggle = tester.widget(toggleFinder);
+
+      expect(toggle.isActive, true);
+    });
+
+    testWidgets('トグルをタップするとテーマモードが切り替わること', (WidgetTester tester) async {
+      when(mockRepository.loadThemeMode()).thenAnswer((_) async => ThemeMode.light);
+
+      await tester.pumpWidget(providerScope);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ToggleButton));
+      await tester.pumpAndSettle();
+
+      verify(mockRepository.saveThemeMode(ThemeMode.dark)).called(1);
+
+      await tester.tap(find.byType(ToggleButton));
+      await tester.pumpAndSettle();
+
+      verify(mockRepository.saveThemeMode(ThemeMode.light)).called(1);
+    });
   });
 }
