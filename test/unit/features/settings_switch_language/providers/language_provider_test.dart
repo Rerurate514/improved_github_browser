@@ -17,13 +17,10 @@ void main() {
   setUp(() {
     mockRepository = MockLanguageRepository();
 
-    when(mockRepository.loadLang())
-        .thenAnswer((_) async => Language.japanese);
+    when(mockRepository.loadLang()).thenAnswer((_) async => Language.japanese);
 
     container = ProviderContainer(
-      overrides: [
-        languageRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [languageRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -31,23 +28,23 @@ void main() {
     container.dispose();
   });
 
-  test('初期状態はLanguage.japaneseであること', () async {
-    
-    expect(container.read(languageProvider), Language.japanese);
-    
-    await Future<dynamic>.delayed(Duration.zero);
-    
-    verify(mockRepository.loadLang()).called(1);
-  });
+  group("language_provider", () {
+    test('初期状態はLanguage.japaneseであること', () async {
+      expect(container.read(languageProvider), Language.japanese);
 
-  test('setThemeModeを呼び出すと、リポジトリが更新され状態が変わること', () async {
-    when(mockRepository.saveLang(any))
-        .thenAnswer((_) async {});
-        
-    await container.read(languageProvider.notifier).setLanguage(Language.japanese);
-    
-    verify(mockRepository.saveLang(Language.japanese)).called(1);
-    
-    expect(container.read(languageProvider), Language.japanese);
+      await Future<dynamic>.delayed(Duration.zero);
+
+      verify(mockRepository.loadLang()).called(1);
+    });
+
+    test('setThemeModeを呼び出すと、リポジトリが更新され状態が変わること', () async {
+      when(mockRepository.saveLang(any)).thenAnswer((_) async {});
+
+      await container.read(languageProvider.notifier).setLanguage(Language.japanese);
+
+      verify(mockRepository.saveLang(Language.japanese)).called(1);
+
+      expect(container.read(languageProvider), Language.japanese);
+    });
   });
 }

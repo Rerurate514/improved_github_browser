@@ -17,13 +17,10 @@ void main() {
   setUp(() {
     mockRepository = MockThemeRepository();
 
-    when(mockRepository.loadThemeMode())
-        .thenAnswer((_) async => ThemeMode.dark);
+    when(mockRepository.loadThemeMode()).thenAnswer((_) async => ThemeMode.dark);
 
     container = ProviderContainer(
-      overrides: [
-        themeRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [themeRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -31,23 +28,23 @@ void main() {
     container.dispose();
   });
 
-  test('初期状態はThemeMode.systemであること', () async {
-    
-    expect(container.read(themeModeProvider), ThemeMode.system);
-    
-    await Future<dynamic>.delayed(Duration.zero);
-    
-    verify(mockRepository.loadThemeMode()).called(1);
-  });
+  group("theme_mode_provider", () {
+    test('初期状態はThemeMode.systemであること', () async {
+      expect(container.read(themeModeProvider), ThemeMode.system);
 
-  test('setThemeModeを呼び出すと、リポジトリが更新され状態が変わること', () async {
-    when(mockRepository.saveThemeMode(any))
-        .thenAnswer((_) async {});
-        
-    await container.read(themeModeProvider.notifier).setThemeMode(ThemeMode.dark);
-    
-    verify(mockRepository.saveThemeMode(ThemeMode.dark)).called(1);
-    
-    expect(container.read(themeModeProvider), ThemeMode.dark);
+      await Future<dynamic>.delayed(Duration.zero);
+
+      verify(mockRepository.loadThemeMode()).called(1);
+    });
+
+    test('setThemeModeを呼び出すと、リポジトリが更新され状態が変わること', () async {
+      when(mockRepository.saveThemeMode(any)).thenAnswer((_) async {});
+
+      await container.read(themeModeProvider.notifier).setThemeMode(ThemeMode.dark);
+
+      verify(mockRepository.saveThemeMode(ThemeMode.dark)).called(1);
+
+      expect(container.read(themeModeProvider), ThemeMode.dark);
+    });
   });
 }
