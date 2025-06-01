@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/providers/navigator_key_provider.dart';
 import 'package:github_browser/core/providers/shared_prefs_cache_provider.dart';
-import 'package:github_browser/features/github_auth/components/signin_wrapper.dart';
+import 'package:github_browser/core/routes/router.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
@@ -29,10 +29,13 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(languageProvider).locale;
     final navigatorKey = ref.read(navigatorKeyProvider);
+    final router = createGoRouter(navigatorKey);
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+
       title: 'Github_browser',
+
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -52,6 +55,7 @@ class MyApp extends ConsumerWidget {
 
         return supportedLocales.first;
       },
+
       themeMode: themeMode,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -61,8 +65,8 @@ class MyApp extends ConsumerWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      navigatorKey: navigatorKey,
-      home: const SignInWrapper()
+
+      routerConfig: router,
     );
   }
 }
