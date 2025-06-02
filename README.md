@@ -72,10 +72,10 @@
 次に、以下のコマンド群を実行します。
 ```
 fvm use 3.32.0
-flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
-flutter gen-l10n
-flutter pub get
+fvm flutter pub get
+fvm flutter pub run build_runner build --delete-conflicting-outputs
+fvm flutter gen-l10n
+fvm flutter pub get
 ```
 
 ## システム要件
