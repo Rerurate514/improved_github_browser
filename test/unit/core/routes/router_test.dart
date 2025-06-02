@@ -5,9 +5,7 @@ import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/core/routes/router.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
-import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
-import 'package:github_browser/pages/repo_detail_page.dart';
 import 'package:go_router/go_router.dart';
 
 class MockSignInNotifier extends SignInNotifier {
