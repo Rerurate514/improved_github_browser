@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:github_browser/core/components/search_field.dart';
 import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
 import 'package:github_browser/features/repo_search/providers/search_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SearchPage extends ConsumerStatefulWidget {
+class SearchPage extends HookConsumerWidget {
   const SearchPage({super.key});
 
   @override
-  // ignore: no_logic_in_create_state
-  ConsumerState<SearchPage> createState() => SearchPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final query = useState<String>("");
 
-class SearchPageState extends ConsumerState<SearchPage> {
-  String _query = "";
-
-  Future<void> _handleSearch(String query) async {
-    setState(() {
-      _query = query;
-    });
-    ref.read(searchStateProvider.notifier).searchRepositories(query);
-  }
-
-  @override
-  Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    void handleSearch(String newQuery) {
+      query.value = newQuery;
+      ref.read(searchStateProvider.notifier).searchRepositories(newQuery);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -47,13 +40,13 @@ class SearchPageState extends ConsumerState<SearchPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SearchField(
-              onSearch: _handleSearch,
+              onSearch: handleSearch,
               hint: appLocalizations.home_search_hint,
             ),
             const SizedBox(height: 20),
             
             Expanded(
-              child: RepositoryResultView(isEmptySearchQuery: _query.isEmpty,),
+              child: RepositoryResultView(isEmptySearchQuery: query.value.isEmpty),
             )
           ],
         ),
