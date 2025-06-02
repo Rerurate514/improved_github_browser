@@ -29,7 +29,7 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(languageProvider).locale;
     final navigatorKey = ref.read(navigatorKeyProvider);
-    final router = createGoRouter(navigatorKey);
+    final router = createGoRouter(navigatorKey, ref);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
