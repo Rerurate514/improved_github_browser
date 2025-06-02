@@ -18,7 +18,7 @@ GoRouter createGoRouter(
 ) {
   return GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: AppRoutes.initialPage,
+    initialLocation: AppRoutes.initialPage.path,
     redirect: (context, state) {
       final signInState = ref.watch(signinStateProvider);
       final currentPath = state.matchedLocation;
@@ -30,19 +30,19 @@ GoRouter createGoRouter(
           return null;
         },
         error: (error, stackTrace) {
-          if (currentPath != AppRoutes.signInPage) {
-            return AppRoutes.signInPage;
+          if (currentPath != AppRoutes.signInPage.path) {
+            return AppRoutes.signInPage.path;
           }
           return null;
         },
         data: (auth) {
           if (auth.isSuccess) {
-            if (currentPath == AppRoutes.initialPage || currentPath == AppRoutes.signInPage) {
-              return AppRoutes.searchPage;
+            if (currentPath == AppRoutes.initialPage.path || currentPath == AppRoutes.signInPage.path) {
+              return AppRoutes.searchPage.path;
             }
           } else {
-            if (currentPath == AppRoutes.initialPage) {
-              return AppRoutes.signInPage;
+            if (currentPath == AppRoutes.initialPage.path) {
+              return AppRoutes.signInPage.path;
             }
           }
           
@@ -52,8 +52,8 @@ GoRouter createGoRouter(
     },
     routes: [
       GoRoute(
-        path: AppRoutes.initialPage,
-        name: 'initial',
+        path: AppRoutes.initialPage.path,
+        name: AppRoutes.initialPage.name,
         pageBuilder: (context, state) {
           return MaterialPage(
             key: state.pageKey,
@@ -62,8 +62,8 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: AppRoutes.signInPage,
-        name: 'signin',
+        path: AppRoutes.signInPage.path,
+        name: AppRoutes.signInPage.name,
         pageBuilder: (context, state) {
           return MaterialPage(
             key: state.pageKey,
@@ -72,8 +72,8 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: AppRoutes.searchPage,
-        name: 'repositorySearch',
+        path: AppRoutes.searchPage.path,
+        name: AppRoutes.searchPage.name,
         pageBuilder: (context, state) {
           return MaterialPage(
             key: state.pageKey,
@@ -82,8 +82,8 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: AppRoutes.detailPage,
-        name: 'repositoryDetail',
+        path: AppRoutes.detailPage.path,
+        name: AppRoutes.detailPage.name,
         pageBuilder: (context, state) {
           return MaterialPage(
             key: state.pageKey,
@@ -92,8 +92,8 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: AppRoutes.settingsPage,
-        name: 'setting',
+        path: AppRoutes.settingsPage.path,
+        name: AppRoutes.settingsPage.name,
         pageBuilder: (context, state) {
           return MaterialPage(
             key: state.pageKey, 

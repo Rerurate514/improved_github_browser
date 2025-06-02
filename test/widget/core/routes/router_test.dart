@@ -174,10 +174,10 @@ void main() {
           ),
         );
 
-        router.go(AppRoutes.searchPage);
+        router.go(AppRoutes.searchPage.path);
         await tester.pumpAndSettle();
 
-        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.signInPage));
+        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.signInPage.path));
       });
 
       testWidgets('認証成功時、サインインページから検索ページにリダイレクトすること', (tester) async {
@@ -201,11 +201,11 @@ void main() {
           ),
         );
 
-        router.go(AppRoutes.signInPage);
+        router.go(AppRoutes.signInPage.path);
         await tester.pump();
         await tester.pumpAndSettle();
 
-        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.searchPage));
+        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.searchPage.path));
       });
 
       testWidgets('認証済みで検索ページにいる場合、リダイレクトしないこと', (tester) async {
@@ -229,10 +229,10 @@ void main() {
           ),
         );
 
-        router.go(AppRoutes.searchPage);
+        router.go(AppRoutes.searchPage.path);
         await tester.pumpAndSettle();
 
-        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.searchPage));
+        expect(router.routerDelegate.currentConfiguration.uri.path, equals(AppRoutes.searchPage.path));
       });
     });
 
@@ -260,11 +260,11 @@ void main() {
         final router = createGoRouter(navigatorKey, testRef);
         final routes = router.configuration.routes.cast<GoRoute>();
 
-        expect(routes.any((route) => route.path == AppRoutes.initialPage), isTrue);
-        expect(routes.any((route) => route.path == AppRoutes.signInPage), isTrue);
-        expect(routes.any((route) => route.path == AppRoutes.searchPage), isTrue);
-        expect(routes.any((route) => route.path == AppRoutes.detailPage), isTrue);
-        expect(routes.any((route) => route.path == AppRoutes.settingsPage), isTrue);
+        expect(routes.any((route) => route.path == AppRoutes.initialPage.path), isTrue);
+        expect(routes.any((route) => route.path == AppRoutes.signInPage.path), isTrue);
+        expect(routes.any((route) => route.path == AppRoutes.searchPage.path), isTrue);
+        expect(routes.any((route) => route.path == AppRoutes.detailPage.path), isTrue);
+        expect(routes.any((route) => route.path == AppRoutes.settingsPage.path), isTrue);
       });
     });
   });
