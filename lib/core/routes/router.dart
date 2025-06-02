@@ -97,9 +97,15 @@ GoRouter createGoRouter(
         },
       ),
     ],
-    errorPageBuilder: (context, state) => MaterialPage(
-      key: state.pageKey,
-      child: Scaffold(body: Center(child: Text(state.error.toString()))),
-    ),
+    errorPageBuilder: (context, state) {
+      return MaterialPage(
+        key: state.pageKey,
+        child: Scaffold(
+          body: Center(
+            child: Text(state.error.toString())
+          )
+        ),
+      );
+    },
   );
 }
