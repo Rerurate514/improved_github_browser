@@ -29,7 +29,7 @@ class SearchPage extends HookConsumerWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              context.push(AppRoutes.settingsPage);
+              context.push(AppRoutes.settingsPage.path);
             },
           ),
         ],

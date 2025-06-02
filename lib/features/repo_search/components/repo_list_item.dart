@@ -19,7 +19,7 @@ class RepositoryListItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: () {
-          context.push(AppRoutes.detailPage, extra: repository);
+          context.push(AppRoutes.detailPage.path, extra: repository);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
