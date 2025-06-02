@@ -1,80 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:github_browser/core/components/search_field.dart';
-import 'package:github_browser/core/routes/page_router.dart';
+import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/features/repo_search/components/repo_result_view.dart';
-import 'package:github_browser/features/repo_search/entities/repository.dart';
-import 'package:github_browser/features/repo_search/repositories/github_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/features/repo_search/providers/search_state_provider.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SearchPage extends StatefulWidget {
-  final String token;
-  const SearchPage({super.key, required this.token});
+class SearchPage extends HookConsumerWidget {
+  const SearchPage({super.key});
 
   @override
-  // ignore: no_logic_in_create_state
-  State<SearchPage> createState() => SearchPageState(token);
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final query = useState<String>("");
 
-class SearchPageState extends State<SearchPage> {
-  String _searchQuery = '';
-  bool _isLoading = false;
-  List<Repository> _searchResults = [];
-  // ignore: unused_field
-  String? _errorMessage;
-  
-  late final GitHubRepository _repository;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
-  //ここでtokenをwidget.token経由で渡そうとすると、
-  //late final フィールドの初期化タイミングの問題が発生するためコンストラクタで
-  //直接渡す方式を採用
-  SearchPageState(String token) : _repository = GitHubRepository(apiToken: token);
-  
-  @override
-  void dispose() {
-    _repository.dispose();
-    super.dispose();
-  }
-
-  // 検索処理
-  Future<void> _handleSearch(String query) async {
-    setState(() {
-      _searchQuery = query;
-      _isLoading = true;
-      _errorMessage = null;
-    });
-    
-    if (query.isEmpty) {
-      setState(() {
-        _searchResults = [];
-        _isLoading = false;
-      });
-      return;
+    void handleSearch(String newQuery) {
+      query.value = newQuery;
+      ref.read(searchStateProvider.notifier).searchRepositories(newQuery);
     }
-    
-    try {
-      final results = await _repository.searchRepositories(query);
-      setState(() {
-        _searchResults = results;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = '${"error_general"}: $e';
-        _isLoading = false;
-      });
-    }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.home_bar_title),
+        title: Text(appLocalizations.home_bar_title),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              PageRouter.navigateSettingsPage(context);
+              context.push(AppRoutes.settingsPage);
             },
           ),
         ],
@@ -85,17 +40,13 @@ class SearchPageState extends State<SearchPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SearchField(
-              onSearch: _handleSearch,
-              hint: AppLocalizations.of(context)!.home_search_hint,
+              onSearch: handleSearch,
+              hint: appLocalizations.home_search_hint,
             ),
             const SizedBox(height: 20),
             
             Expanded(
-              child: RepositoryResultsView(
-                isLoading: _isLoading, 
-                searchResults: _searchResults, 
-                searchQuery: _searchQuery
-              ),
+              child: RepositoryResultView(isEmptySearchQuery: query.value.isEmpty),
             )
           ],
         ),
@@ -103,4 +54,3 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 }
-

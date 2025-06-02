@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_browser/features/github_auth/components/auth_wrapper.dart';
+import 'package:github_browser/core/providers/shared_prefs_cache_provider.dart';
+import 'package:github_browser/core/routes/router_provider.dart';
 import 'package:github_browser/features/settings_lang_switch/providers/language_provider.dart';
 import 'package:github_browser/features/settings_theme_switch/providers/theme_mode_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:github_browser/l10n/app_localizations.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final container = ProviderContainer();
+  await container.read(initSharedPrefsCacheProvider.future);
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container, 
+      child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends ConsumerWidget {
@@ -17,20 +27,20 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(languageProvider).locale;
-
-    return MaterialApp(
+    final router = ref.watch(goRouterProvider);
+    
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+
       title: 'Github_browser',
-      localizationsDelegates: [
+
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         AppLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ja', ''),
-        const Locale('en', ''),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
       localeResolutionCallback: (locale, supportedLocales) {
         if (locale == null) return supportedLocales.first;
@@ -43,6 +53,7 @@ class MyApp extends ConsumerWidget {
 
         return supportedLocales.first;
       },
+
       themeMode: themeMode,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -52,7 +63,8 @@ class MyApp extends ConsumerWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: AuthWrapper()
+
+      routerConfig: router,
     );
   }
 }

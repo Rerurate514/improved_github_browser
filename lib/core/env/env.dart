@@ -7,7 +7,7 @@ abstract class Env {
   @EnviedField(varName: 'API_KEY', obfuscate: true)
   static String apiKey = _Env.apiKey;
 
-  @EnviedField(varName: 'CLIENT_ID')
+  @EnviedField(varName: 'CLIENT_ID', obfuscate: true)
   static String clientId = _Env.clientId;
 
   @EnviedField(varName: 'CLIENT_SECRET', obfuscate: true)
