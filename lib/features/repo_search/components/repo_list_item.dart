@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_browser/core/components/info_chip.dart';
+import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,7 +19,7 @@ class RepositoryListItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: () {
-          context.push("/repository-detail", extra: repository);
+          context.push(AppRoutes.detailPage, extra: repository);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),

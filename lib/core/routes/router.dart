@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
 import 'package:github_browser/pages/repo_detail_page.dart';
@@ -14,37 +15,38 @@ GoRouter createGoRouter(
 ) {
   return GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: '/',
+    initialLocation: AppRoutes.initialPage,
     redirect: (context, state) {
       final signInState = ref.watch(signinStateProvider);
-      
+
       return signInState.when(
         loading: () {
           return null;
         },
         error: (error, stackTrace) {
-          if (state.matchedLocation != '/signin') {
-            return '/signin';
+          if (state.matchedLocation != AppRoutes.signInPage) {
+            return AppRoutes.signInPage;
           }
           return null;
         },
         data: (auth) {
           if (auth.isSuccess) {
-            if (state.matchedLocation == '/' || state.matchedLocation == '/signin') {
-              return '/repository-search';
+            if (state.matchedLocation == AppRoutes.initialPage || state.matchedLocation == AppRoutes.signInPage) {
+              return AppRoutes.searchPage;
             }
           } else {
-            if (state.matchedLocation != '/signin') {
-              return '/signin';
+            if (state.matchedLocation == AppRoutes.initialPage) {
+              return AppRoutes.signInPage;
             }
           }
+
           return null;
         },
       );
     },
     routes: [
       GoRoute(
-        path: '/',
+        path: AppRoutes.initialPage,
         name: 'initial',
         pageBuilder: (context, state) {
           return const MaterialPage(
@@ -57,7 +59,7 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: '/signin',
+        path: AppRoutes.signInPage,
         name: 'signin',
         pageBuilder: (context, state) {
           return MaterialPage(
@@ -67,7 +69,7 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: '/repository-search',
+        path: AppRoutes.searchPage,
         name: 'repositorySearch',
         pageBuilder: (context, state) {
           return MaterialPage(
@@ -77,7 +79,7 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: '/repository-detail',
+        path: AppRoutes.detailPage,
         name: 'repositoryDetail',
         pageBuilder: (context, state) {
           return MaterialPage(
@@ -87,7 +89,7 @@ GoRouter createGoRouter(
         },
       ),
       GoRoute(
-        path: '/setting',
+        path: AppRoutes.settingsPage,
         name: 'setting',
         pageBuilder: (context, state) {
           return MaterialPage(
