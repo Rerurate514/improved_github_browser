@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/routes/app_routes.dart';
@@ -11,35 +13,38 @@ import 'package:go_router/go_router.dart';
 
 GoRouter createGoRouter(
   GlobalKey<NavigatorState> navigatorKey,
-  WidgetRef ref,
+  Ref ref,
 ) {
   return GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: AppRoutes.initialPage,
     redirect: (context, state) {
       final signInState = ref.watch(signinStateProvider);
+      final currentPath = state.matchedLocation;
+
+      log(currentPath);
 
       return signInState.when(
         loading: () {
           return null;
         },
         error: (error, stackTrace) {
-          if (state.matchedLocation != AppRoutes.signInPage) {
+          if (currentPath != AppRoutes.signInPage) {
             return AppRoutes.signInPage;
           }
           return null;
         },
         data: (auth) {
           if (auth.isSuccess) {
-            if (state.matchedLocation == AppRoutes.initialPage || state.matchedLocation == AppRoutes.signInPage) {
+            if (currentPath == AppRoutes.initialPage || currentPath == AppRoutes.signInPage) {
               return AppRoutes.searchPage;
             }
           } else {
-            if (state.matchedLocation == AppRoutes.initialPage) {
+            if (currentPath == AppRoutes.initialPage) {
               return AppRoutes.signInPage;
             }
           }
-
+          log("redirect!!");
           return null;
         },
       );
