@@ -44,7 +44,7 @@ GoRouter createGoRouter(
               return AppRoutes.signInPage;
             }
           }
-          log("redirect!!");
+          
           return null;
         },
       );
