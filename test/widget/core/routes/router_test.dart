@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/core/routes/router.dart';
 import 'package:github_browser/features/github_auth/entities/auth_result.dart';
+import 'package:github_browser/features/github_auth/providers/signin_state_notifier.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
