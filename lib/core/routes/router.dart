@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser/core/routes/app_routes.dart';
 import 'package:github_browser/features/github_auth/providers/signin_state_provider.dart';
 import 'package:github_browser/features/repo_search/entities/repository.dart';
+import 'package:github_browser/pages/redirect_indicator_page.dart';
 import 'package:github_browser/pages/repo_detail_page.dart';
 import 'package:github_browser/pages/search_page.dart';
 import 'package:github_browser/pages/settings_page.dart';
@@ -54,12 +55,9 @@ GoRouter createGoRouter(
         path: AppRoutes.initialPage,
         name: 'initial',
         pageBuilder: (context, state) {
-          return const MaterialPage(
-            child: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
+          return MaterialPage(
+            key: state.pageKey,
+            child: const RedirectIndicatorPage(),
           );
         },
       ),
