@@ -209,6 +209,7 @@ flutter pub get
 - app_links : 6.4.0
 - internet_connection_checker : 3.0.1
 - go_router : 15.1.2
+- flutter_hooks : 0.21.2
 
 ### Dev Dependencies
 - flutter_lints : 5.0.0
